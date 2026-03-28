@@ -1,10 +1,54 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+
+const projects = [
+  {
+    title: "Fullstack Task Manager",
+    description:
+      "A fullstack productivity application with ASP.NET Core Web API, PostgreSQL, authentication, and a modern frontend dashboard.",
+    stack: ["ASP.NET Core", "PostgreSQL", "React", "Docker"],
+    liveUrl: "#",
+    sourceUrl: "#"
+  },
+  {
+    title: "URL Shortener API",
+    description:
+      "A backend-focused service for generating short links, tracking usage metrics, and exposing clean REST endpoints for integration.",
+    stack: ["ASP.NET Core", "REST API", "PostgreSQL", "Docker"],
+    liveUrl: "#",
+    sourceUrl: "#"
+  },
+  {
+    title: "Personal Portfolio Platform",
+    description:
+      "A self-hosted personal website and blog deployed on VPS with Dokploy, used to document engineering notes and showcase selected projects.",
+    stack: ["Astro", "Tailwind CSS", "Dokploy", "VPS"],
+    liveUrl: "#",
+    sourceUrl: "#"
+  }
+];
 ---
 
 <BaseLayout title="Projects">
-  <h1 class="text-3xl font-bold">Projects</h1>
-  <p class="mt-4 text-gray-600">
-    This page will showcase my selected fullstack and backend projects.
-  </p>
+  <section>
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
+      Portfolio
+    </p>
+
+    <h1 class="mt-4 text-4xl font-bold tracking-tight">
+      Selected Projects
+    </h1>
+
+    <p class="mt-6 max-w-3xl text-lg leading-8 text-gray-600">
+      These projects reflect my current focus on backend engineering, cloud-oriented deployment,
+      and fullstack application delivery.
+    </p>
+  </section>
+
+  <section class="mt-12 grid gap-6 md:grid-cols-2">
+    {projects.map((project) => (
+      <ProjectCard {...project} />
+    ))}
+  </section>
 </BaseLayout>
