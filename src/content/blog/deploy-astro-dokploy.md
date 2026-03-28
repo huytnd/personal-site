@@ -1,0 +1,25 @@
+---
+title: "Deploy Astro Website to Dokploy on VPS"
+description: "My first deployment experience using Dokploy to host a static Astro website."
+pubDate: 2026-03-29
+tags:
+  - astro
+  - dokploy
+  - vps
+---
+
+## Introduction
+
+This article documents my first experience deploying an Astro personal website to a VPS using Dokploy.
+
+## Steps
+
+1. Create Astro project
+2. Add Tailwind CSS
+3. Push to GitHub
+4. Deploy using Dokploy
+
+## Lessons Learned
+
+- Always test production build locally
+- Keep the deployment simple

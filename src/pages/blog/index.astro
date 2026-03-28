@@ -1,0 +1,60 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const posts = await getCollection("blog");
+// console.log(posts);
+
+posts.sort(
+  (a, b) =>
+    b.data.pubDate.getTime() -
+    a.data.pubDate.getTime()
+);
+---
+
+<BaseLayout title="Blog">
+
+  <section>
+
+    <h1 class="text-4xl font-bold">
+      Blog
+    </h1>
+
+    <p class="mt-4 text-gray-600">
+      Notes about backend engineering, deployment, and cloud learning.
+    </p>
+
+  </section>
+
+  <section class="mt-10 space-y-6">
+
+    {posts.map((post) => (
+
+      <article class="border-b pb-6">
+
+        <h2 class="text-xl font-semibold">
+
+          <a
+            href={`/blog/${post.id}`}
+            class="hover:underline"
+          >
+            {post.data.title}
+          </a>
+
+        </h2>
+
+        <p class="mt-2 text-sm text-gray-500">
+          {post.data.pubDate.toDateString()}
+        </p>
+
+        <p class="mt-3 text-gray-600">
+          {post.data.description}
+        </p>
+
+      </article>
+
+    ))}
+
+  </section>
+
+</BaseLayout>
