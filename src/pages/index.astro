@@ -3,15 +3,34 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout title="Home">
-	<section class="text-center py-16">
-		<h1 class="text-5xl font-bold">
-			Huy Tran
-		</h1>
-		<p class="text-xl text-gray-600 mt-4">
-			Backend engineer with 10+ years of experience in building scalable and
-			reliable systems. Proficient in cloud technologies, microservices
-			architecture, and DevOps practices. Passionate about optimizing
-			performance and ensuring security in backend applications.
-		</p>
-	</section>
+	<section class="py-16">
+    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
+      Backend / Cloud Engineer
+    </p>
+
+    <h1 class="mt-4 text-5xl font-bold tracking-tight">
+      Huy Tran
+    </h1>
+
+    <p class="mt-6 max-w-2xl text-lg leading-8 text-gray-600">
+      I build production-ready web applications with .NET, Docker, and modern frontend tools,
+      while documenting deployment and engineering lessons through a personal blog.
+    </p>
+
+    <div class="mt-8 flex flex-wrap gap-4">
+      <a
+        href="/projects"
+        class="rounded-lg bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
+      >
+        View Projects
+      </a>
+
+      <a
+        href="/blog"
+        class="rounded-lg border border-gray-300 bg-white px-5 py-3 text-sm font-medium text-gray-900 transition hover:bg-gray-100"
+      >
+        Read Blog
+      </a>
+    </div>
+  </section>
 </BaseLayout>
