@@ -23,3 +23,13 @@ This article documents my first experience deploying an Astro personal website t
 
 - Always test production build locally
 - Keep the deployment simple
+
+## Sample Commands
+
+```bash
+npm install
+npm run dev
+npm run build
+```
+
+> Always test the production build locally before deploying.
