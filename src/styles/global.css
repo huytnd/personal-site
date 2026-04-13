@@ -1,12 +1,33 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+:root {
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-strong: rgba(255, 255, 255, 0.88);
+  --border-soft: rgba(148, 163, 184, 0.22);
+  --ink: #0f172a;
+  --muted: #475569;
+  --accent: #0f766e;
+  --accent-soft: #ccfbf1;
+}
+
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  @apply bg-gray-50 text-gray-900 antialiased;
+  @apply min-h-screen text-slate-900 antialiased;
+  background:
+    radial-gradient(circle at top left, rgba(20, 184, 166, 0.20), transparent 28rem),
+    radial-gradient(circle at top right, rgba(251, 191, 36, 0.18), transparent 24rem),
+    linear-gradient(180deg, #f8fafc 0%, #eef2ff 52%, #f8fafc 100%);
+  color: var(--ink);
+  font-family:
+    "Plus Jakarta Sans",
+    "Manrope",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
 }
 
 a {
@@ -15,4 +36,74 @@ a {
 
 img {
   @apply rounded-xl;
+}
+
+.site-shell {
+  @apply relative min-h-screen overflow-x-hidden;
+}
+
+.site-shell__glow {
+  @apply pointer-events-none absolute h-80 w-80 rounded-full blur-3xl;
+}
+
+.site-shell__glow--left {
+  @apply -left-24 top-28 bg-teal-200/40;
+}
+
+.site-shell__glow--right {
+  @apply -right-16 top-16 bg-amber-200/40;
+}
+
+.site-panel {
+  @apply rounded-[2rem] border px-6 py-8 shadow-[0_30px_80px_-45px_rgba(15,23,42,0.5)] backdrop-blur-xl sm:px-8 sm:py-10 md:px-12 md:py-12 lg:px-14;
+  background: linear-gradient(180deg, var(--surface-strong), var(--surface));
+  border-color: var(--border-soft);
+}
+
+.header-shell {
+  @apply flex items-center justify-between gap-6 rounded-[1.75rem] border px-5 py-4 shadow-[0_20px_50px_-35px_rgba(15,23,42,0.55)] backdrop-blur-xl md:px-6;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(255, 255, 255, 0.7));
+  border-color: var(--border-soft);
+}
+
+.header-brand {
+  @apply inline-flex items-center gap-3;
+}
+
+.header-brand__mark {
+  @apply inline-flex h-11 w-11 items-center justify-center rounded-2xl text-sm font-bold tracking-[0.18em] text-white;
+  background: linear-gradient(135deg, #0f766e, #1d4ed8);
+  box-shadow: 0 18px 30px -18px rgba(15, 118, 110, 0.75);
+}
+
+.header-mobile-nav {
+  @apply flex flex-wrap gap-3 rounded-[1.5rem] border px-4 py-4 shadow-[0_20px_40px_-34px_rgba(15,23,42,0.45)] backdrop-blur-xl;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.68));
+  border-color: var(--border-soft);
+}
+
+.footer-panel {
+  @apply rounded-[1.5rem] border px-6 py-5 shadow-[0_18px_40px_-36px_rgba(15,23,42,0.55)] backdrop-blur-xl;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.64));
+  border-color: var(--border-soft);
+}
+
+.footer-copy {
+  @apply text-sm font-medium tracking-[0.08em] text-slate-600;
+}
+
+.portrait-shell {
+  @apply relative overflow-hidden rounded-[2rem] border border-slate-200/80 bg-white/80 p-4 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.75)] backdrop-blur-sm;
+}
+
+.portrait-image {
+  @apply h-[25rem] w-full rounded-[1.5rem] object-cover md:h-[34rem];
+}
+
+.portrait-placeholder {
+  @apply flex h-[25rem] w-full items-end rounded-[1.5rem] p-6 text-white md:h-[34rem];
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0.72)),
+    radial-gradient(circle at top, rgba(45, 212, 191, 0.8), transparent 35%),
+    linear-gradient(135deg, #0f172a, #134e4a 55%, #1d4ed8);
 }

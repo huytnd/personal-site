@@ -21,15 +21,18 @@ const featuredProjects = [
 ---
 
 <BaseLayout title="Home">
-	<section class="py-16">
+	<section class="grid gap-10 py-6 md:grid-cols-[1.3fr_0.7fr] md:items-end md:py-10">
+		<div>
 		<p
-			class="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500">
+			class="text-sm font-semibold uppercase tracking-[0.2em] text-teal-700">
 			Backend / Cloud Engineer
 		</p>
 
-		<h1 class="mt-4 text-5xl font-bold tracking-tight">Huy Tran</h1>
+		<h1 class="mt-5 max-w-3xl text-5xl font-bold tracking-tight text-slate-950 md:text-6xl">
+			Building calm, production-ready software with a backend-first mindset.
+		</h1>
 
-		<p class="mt-6 max-w-2xl text-lg leading-8 text-gray-600">
+		<p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
 			I build production-ready web applications with .NET, Docker, and
 			modern frontend tools, while documenting deployment and engineering
 			lessons through a personal blog.
@@ -38,35 +41,54 @@ const featuredProjects = [
 		<div class="mt-8 flex flex-wrap gap-4">
 			<a
 				href="/projects"
-				class="rounded-lg bg-black px-5 py-3 text-sm font-medium text-white transition hover:opacity-90"
+				class="rounded-full bg-slate-950 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-slate-800"
 			>
 				View Projects
 			</a>
 
 			<a
 				href="/blog"
-				class="rounded-lg border border-gray-300 bg-white px-5 py-3 text-sm font-medium text-gray-900 transition hover:bg-gray-100"
+				class="rounded-full border border-slate-300/80 bg-white/80 px-6 py-3 text-sm font-medium text-slate-900 transition hover:-translate-y-0.5 hover:bg-white"
 			>
 				Read Blog
 			</a>
 		</div>
+		</div>
+
+		<div class="rounded-[1.75rem] border border-teal-100 bg-gradient-to-br from-teal-50 via-white to-amber-50 p-6 shadow-[0_30px_70px_-45px_rgba(15,23,42,0.7)]">
+			<p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Current Focus</p>
+			<div class="mt-5 space-y-4">
+				<div class="rounded-2xl bg-white/85 p-4">
+					<p class="text-sm font-medium text-slate-500">Stack</p>
+					<p class="mt-1 text-lg font-semibold text-slate-950">.NET, PostgreSQL, Docker, Astro</p>
+				</div>
+				<div class="rounded-2xl bg-white/85 p-4">
+					<p class="text-sm font-medium text-slate-500">Direction</p>
+					<p class="mt-1 text-lg font-semibold text-slate-950">Shipping dependable apps and writing deployment notes.</p>
+				</div>
+				<div class="rounded-2xl bg-slate-950 p-4 text-white">
+					<p class="text-sm font-medium text-white/70">Location</p>
+					<p class="mt-1 text-lg font-semibold">Available for backend-focused engineering work.</p>
+				</div>
+			</div>
+		</div>
 	</section>
-	<section class="border-t border-gray-200 py-16">
+	<section class="border-t border-slate-200/70 py-16">
 		<div class="flex items-end justify-between gap-4">
 			<div>
 				<p
-					class="text-sm font-semibold uppercase tracking-[0.2em] text-gray-500"
+					class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500"
 				>
 					Featured Work
 				</p>
-				<h2 class="mt-3 text-3xl font-bold tracking-tight">
+				<h2 class="mt-3 text-3xl font-bold tracking-tight text-slate-950">
 					A few things I’m building
 				</h2>
 			</div>
 
 			<a
 				href="/projects"
-				class="text-sm font-medium text-gray-700 transition hover:text-black"
+				class="text-sm font-medium text-slate-700 transition hover:text-slate-950"
 			>
 				View all projects →
 			</a>
@@ -75,9 +97,9 @@ const featuredProjects = [
 		<div class="mt-8 grid gap-6 md:grid-cols-3">
 			{
 				featuredProjects.map((project) => (
-					<article class="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-						<h3 class="text-lg font-semibold">{project.title}</h3>
-						<p class="mt-3 text-sm leading-7 text-gray-600">
+					<article class="rounded-[1.5rem] border border-slate-200/80 bg-white/80 p-6 shadow-[0_24px_45px_-38px_rgba(15,23,42,0.75)] backdrop-blur-sm transition hover:-translate-y-1">
+						<h3 class="text-lg font-semibold text-slate-950">{project.title}</h3>
+						<p class="mt-3 text-sm leading-7 text-slate-600">
 							{project.description}
 						</p>
 					</article>
