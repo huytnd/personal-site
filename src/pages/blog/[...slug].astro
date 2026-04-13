@@ -1,0 +1,66 @@
+---
+import BlogPostLayout from "../../layouts/BlogPostLayout.astro";
+
+type BlogModule = {
+  Content: unknown;
+  frontmatter: {
+    title: string;
+    description: string;
+    pubDate: string | Date;
+    category?: string;
+    tags?: string[];
+  };
+};
+
+const blogModules = import.meta.glob("../../content/blog/**/*.{md,mdx}", {
+  eager: true,
+}) as Record<string, BlogModule>;
+
+export async function getStaticPaths() {
+  const modules = import.meta.glob("../../content/blog/**/*.{md,mdx}", {
+    eager: true,
+  }) as Record<string, BlogModule>;
+
+  return Object.entries(modules).map(([filePath]) => ({
+    params: {
+      slug: filePath
+        .replace("../../content/blog/", "")
+        .replace(/\.(md|mdx)$/, ""),
+    },
+  }));
+}
+
+const slugParam = Astro.params.slug;
+const postId = Array.isArray(slugParam) ? slugParam.join("/") : slugParam;
+const posts = Object.entries(blogModules).map(([filePath, module]) => {
+  const relativePath = filePath
+    .replace("../../content/blog/", "")
+    .replace(/\.(md|mdx)$/, "");
+
+  return {
+    id: relativePath,
+    category: relativePath.includes("/") ? relativePath.split("/")[0] : "uncategorized",
+    Content: module.Content,
+    data: {
+      ...module.frontmatter,
+      pubDate: new Date(module.frontmatter.pubDate),
+    },
+  };
+});
+
+if (!postId) {
+  throw new Error("Post slug is required");
+}
+
+const post = posts.find((entry) => entry.id === postId);
+
+if (!post) {
+  throw new Error(`Post not found: ${postId}`);
+}
+
+const { Content } = post;
+---
+
+<BlogPostLayout frontmatter={post.data} category={post.category}>
+  <Content />
+</BlogPostLayout>

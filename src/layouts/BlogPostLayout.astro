@@ -1,7 +1,13 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 
-const { frontmatter } = Astro.props;
+const { frontmatter, category } = Astro.props;
+
+const formatCategory = (value: string) =>
+    value
+        .split(/[-_]/)
+        .map((part: string) => part.charAt(0).toUpperCase() + part.slice(1))
+        .join(" ");
 ---
 
 <BaseLayout title={frontmatter.title}>
@@ -14,7 +20,14 @@ const { frontmatter } = Astro.props;
         </a>
 
         <header class="mt-6 border-b border-gray-200 pb-8">
-            <div class="flex flex-wrap gap-2">
+            <div class="flex flex-wrap items-center gap-2">
+                {
+                    category && (
+                        <span class="rounded-full bg-black px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white">
+                            {formatCategory(category)}
+                        </span>
+                    )
+                }
                 {
                     frontmatter.tags?.map((tag: string) => (
                         <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">

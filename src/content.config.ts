@@ -4,13 +4,14 @@ import { z } from "astro/zod";
 
 const blog = defineCollection({
   loader: glob({
-    pattern: "**/*.{md,mdx}",
+    pattern: "**/[^_]*.{md,mdx}",
     base: "./src/content/blog",
   }),
   schema: z.object({
     title: z.string(),
     description: z.string(),
     pubDate: z.coerce.date(),
+    category: z.string().optional(),
     tags: z.array(z.string()),
   }),
 });
