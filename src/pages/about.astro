@@ -1,19 +1,5 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { existsSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-
-const portraitCandidates = [
-  "/profile-photo.jpg",
-  "/profile-photo.jpeg",
-  "/profile-photo.png",
-  "/profile-photo.webp",
-];
-
-const portraitSrc =
-  portraitCandidates.find((src) =>
-    existsSync(fileURLToPath(new URL(`../../public${src}`, import.meta.url)))
-  ) ?? null;
 
 const contacts = [
   {
@@ -65,22 +51,18 @@ const contacts = [
       </div>
 
       <aside class="portrait-shell">
-        {
-          portraitSrc ? (
-            <img
-              src={portraitSrc}
-              alt="Portrait of Huy Tran"
-              class="portrait-image"
-            />
-          ) : (
-            <div class="portrait-placeholder">
-              <div>
-                <p class="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">Portrait Slot</p>
-                <p class="mt-3 max-w-xs text-2xl font-semibold tracking-tight">Add `public/profile-photo.jpg` to show your photo here.</p>
-              </div>
-            </div>
-          )
-        }
+        <img
+          src="/profile-photo.jpg"
+          alt="Portrait of Huy Tran"
+          class="portrait-image"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <div class="portrait-placeholder" style="display: none;">
+          <div>
+            <p class="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">Portrait Slot</p>
+            <p class="mt-3 max-w-xs text-2xl font-semibold tracking-tight">Add `public/profile-photo.jpg` to show your photo here.</p>
+          </div>
+        </div>
       </aside>
     </div>
 
