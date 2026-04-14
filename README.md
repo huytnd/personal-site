@@ -41,3 +41,9 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Deployment
+
+This project includes a GitHub Actions workflow at [.github/workflows/deploy.yml](./.github/workflows/deploy.yml) that builds the site and deploys `dist/` to an Ubuntu VPS over SSH.
+
+Deployment setup details and required GitHub secrets are documented in [docs/deploy-vps.md](./docs/deploy-vps.md).
