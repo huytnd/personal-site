@@ -3,11 +3,21 @@ import BaseLayout from "./BaseLayout.astro";
 
 const { frontmatter, category } = Astro.props;
 
+const formatDate = (value: string | Date | undefined) => {
+    if (!value) return undefined;
+
+    const date = value instanceof Date ? value : new Date(value);
+    return Number.isNaN(date.getTime()) ? undefined : date.toDateString();
+};
+
 const formatCategory = (value: string) =>
     value
         .split(/[-_]/)
         .map((part: string) => part.charAt(0).toUpperCase() + part.slice(1))
         .join(" ");
+
+const publishedDate = formatDate(frontmatter.publishedDate);
+const updatedDate = formatDate(frontmatter.updatedDate);
 ---
 
 <BaseLayout title={frontmatter.title}>
@@ -48,7 +58,12 @@ const formatCategory = (value: string) =>
             <div
                 class="mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-500"
             >
-                <span>{frontmatter.pubDate.toDateString()}</span>
+                {publishedDate && <span>{publishedDate}</span>}
+                {
+                    updatedDate && (
+                        <span>Updated: {updatedDate}</span>
+                    )
+                }
             </div>
         </header>
 

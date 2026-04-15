@@ -1,0 +1,59 @@
+---
+export interface Props {
+  type?: "info" | "tip" | "tips" | "warning" | "danger" | "success";
+  title?: string;
+}
+
+const {
+    type = "info",
+    title,
+} = Astro.props;
+
+const config = {
+    info: {
+        label: 'Thông tin',
+        icon: 'ℹ️',
+        classes: 'border-sky-500/40 bg-sky-500/10 text-sky-100',
+    },
+    tip: {
+        label: 'Mẹo',
+        icon: '💡',
+        classes: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-100',
+    },
+    tips: {
+        label: 'Mẹo',
+        icon: '💡',
+        classes: 'border-emerald-500/40 bg-emerald-500/10 text-emerald-100',
+    },
+    warning: {
+        label: 'Lưu ý',
+        icon: '⚠️',
+        classes: 'border-yellow-500/40 bg-yellow-500/10 text-yellow-100',
+    },
+    danger: {
+        label: 'Cảnh báo',
+        icon: '⛔',
+        classes: 'border-rose-500/40 bg-rose-500/10 text-rose-100',
+    },
+    success: {
+        label: 'Thành công',
+        icon: '✅',
+        classes: 'border-teal-500/40 bg-teal-500/10 text-teal-100',
+    },
+} as const;
+
+const current = config[type] ?? config.info;
+const heading = title ?? current.label;
+---
+
+<aside class={`my-6 rounded-2xl border p-4 md:p-5 ${current.classes}`}>
+  <div class="flex items-start gap-3">
+    <div class="mt-0.5 text-lg leading-none" aria-hidden="true">{current.icon}</div>
+    <div class="min-w-0 flex-1">
+      <p class="m-0 font-semibold tracking-tight text-white">{heading}</p>
+      <div class="mt-2 text-sm leading-7 text-white/85 [&_a]:text-white [&_a]:underline [&_code]:rounded [&_code]:bg-black/20 [&_code]:px-1.5 [&_code]:py-0.5">
+        <slot />
+      </div>
+    </div>
+  </div>
+</aside>

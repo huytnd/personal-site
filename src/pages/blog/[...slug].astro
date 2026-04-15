@@ -2,11 +2,12 @@
 import BlogPostLayout from "../../layouts/BlogPostLayout.astro";
 
 type BlogModule = {
-  Content: unknown;
+  Content: any;
   frontmatter: {
     title: string;
     description: string;
-    pubDate: string | Date;
+    publishedDate: string | Date;
+    updatedDate?: string | Date;
     category?: string;
     tags?: string[];
   };
@@ -15,6 +16,10 @@ type BlogModule = {
 const blogModules = import.meta.glob("../../content/blog/**/*.{md,mdx}", {
   eager: true,
 }) as Record<string, BlogModule>;
+
+const resolveCategory = (postId: string, frontmatterCategory?: string) =>
+  frontmatterCategory?.trim() ||
+  (postId.includes("/") ? postId.split("/")[0] : "uncategorized");
 
 export async function getStaticPaths() {
   const modules = import.meta.glob("../../content/blog/**/*.{md,mdx}", {
@@ -39,11 +44,14 @@ const posts = Object.entries(blogModules).map(([filePath, module]) => {
 
   return {
     id: relativePath,
-    category: relativePath.includes("/") ? relativePath.split("/")[0] : "uncategorized",
+    category: resolveCategory(relativePath, module.frontmatter.category),
     Content: module.Content,
     data: {
       ...module.frontmatter,
-      pubDate: new Date(module.frontmatter.pubDate),
+      publishedDate: new Date(module.frontmatter.publishedDate),
+      updatedDate: module.frontmatter.updatedDate
+        ? new Date(module.frontmatter.updatedDate)
+        : undefined,
     },
   };
 });

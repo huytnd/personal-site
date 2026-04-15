@@ -1,0 +1,29 @@
+---
+export interface Props {
+  title?: string;
+  items: string[];
+}
+
+const {
+  title = 'Ý chính cần nhớ',
+  items = [],
+} = Astro.props;
+---
+
+{items.length > 0 && (
+  <section class="my-10 rounded-3xl border border-emerald-400/20 bg-emerald-500/5 p-6 md:p-8">
+    <div class="flex items-center gap-3">
+      <div class="text-xl" aria-hidden="true">📌</div>
+      <h3 class="m-0 text-xl font-bold tracking-tight text-white">{title}</h3>
+    </div>
+
+    <ul class="mt-5 space-y-3 pl-0 text-sm leading-7 text-zinc-200 md:text-base">
+      {items.map((item) => (
+        <li class="flex list-none items-start gap-3">
+          <span class="mt-1 text-emerald-300" aria-hidden="true">•</span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+)}

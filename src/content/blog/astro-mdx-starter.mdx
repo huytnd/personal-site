@@ -1,0 +1,53 @@
+---
+title: "Bắt đầu với Astro MDX cho technical blog"
+description: "Cách dùng Callout, CTA và Key Takeaways trong một bài viết MDX của Astro."
+publishedDate: 2026-04-14
+updatedDate: 2026-04-14
+tags:
+  - astro
+  - mdx
+  - blog
+category: Web Development
+draft: false
+featured: true
+---
+
+import Callout from "@/components/mdx/Callout.astro";
+import ArticleCTA from "@/components/mdx/ArticleCTA.astro";
+import NewsletterCTA from "@/components/mdx/NewsletterCTA.astro";
+import KeyTakeaways from "@/components/mdx/KeyTakeaways.astro";
+
+# Bắt đầu với Astro MDX cho technical blog
+
+MDX cho phép anh viết bài như Markdown, nhưng vẫn có thể nhúng component trực tiếp vào nội dung.
+
+<Callout type="tip" title="Một lựa chọn rất hợp cho blog kỹ thuật">
+  Nếu anh thường viết bài về .NET, kiến trúc phần mềm hoặc hướng dẫn từng bước, MDX giúp trình bày nội dung linh hoạt hơn Markdown thuần rất nhiều.
+</Callout>
+
+## Vì sao nên dùng MDX?
+
+Với MDX, anh có thể thêm callout, CTA, newsletter form và các block tóm tắt mà không cần hard-code chúng vào layout của từng bài.
+
+<ArticleCTA
+  title="Xem blueprint kiến trúc Astro trên VPS"
+  description="Bản thiết kế này mô tả cách kết hợp Astro, newsletter, comment và CI/CD để tạo một personal website hoàn chỉnh."
+  href="/blog/astro-vps-architecture"
+  buttonText="Mở blueprint"
+/>
+
+## Một CTA đăng ký email ở giữa bài
+
+<NewsletterCTA
+  title="Nhận bài viết mới qua email"
+  description="Mỗi tuần một email ngắn về .NET, Astro và software architecture."
+  action="/newsletter"
+/>
+
+<KeyTakeaways
+  items={[
+    "MDX rất hợp với technical blog",
+    "Component giúp bài viết nhất quán và chuyên nghiệp hơn",
+    "Chỉ cần vài component cơ bản là đã đủ để nâng chất lượng UX đáng kể"
+  ]}
+/>
