@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://huytnd.io.vn/sitemap-index.xml
