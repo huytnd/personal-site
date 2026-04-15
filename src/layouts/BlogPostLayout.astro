@@ -4,83 +4,62 @@ import BaseLayout from "./BaseLayout.astro";
 const { frontmatter, category } = Astro.props;
 
 const formatDate = (value: string | Date | undefined) => {
-    if (!value) return undefined;
+  if (!value) return undefined;
 
-    const date = value instanceof Date ? value : new Date(value);
-    return Number.isNaN(date.getTime()) ? undefined : date.toDateString();
+  const date = value instanceof Date ? value : new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date.toDateString();
 };
 
 const formatCategory = (value: string) =>
-    value
-        .split(/[-_]/)
-        .map((part: string) => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(" ");
+  value
+    .split(/[-_]/)
+    .map((part: string) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
 
 const publishedDate = formatDate(frontmatter.publishedDate);
 const updatedDate = formatDate(frontmatter.updatedDate);
 ---
 
 <BaseLayout title={frontmatter.title}>
-    <article class="mx-auto max-w-3xl">
-        <a
-            href="/blog"
-            class="inline-flex items-center text-sm font-medium text-gray-500 hover:text-black"
-        >
-            ← Back to blog
-        </a>
+  <article class="article-shell">
+    <a href="/blog" class="article-link">
+      ← Back to blog
+    </a>
 
-        <header class="mt-6 border-b border-gray-200 pb-8">
-            <div class="flex flex-wrap items-center gap-2">
-                {
-                    category && (
-                        <span class="rounded-full bg-black px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-white">
-                            {formatCategory(category)}
-                        </span>
-                    )
-                }
-                {
-                    frontmatter.tags?.map((tag: string) => (
-                        <span class="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
-                            #{tag}
-                        </span>
-                    ))
-                }
-            </div>
+    <header class="article-header">
+      <div class="flex flex-wrap items-center gap-2">
+        {
+          category && (
+            <span class="chip">{formatCategory(category)}</span>
+          )
+        }
+        {
+          frontmatter.tags?.map((tag: string) => (
+            <span class="chip chip--neutral">#{tag}</span>
+          ))
+        }
+      </div>
 
-            <h1 class="mt-5 text-4xl font-bold tracking-tight md:text-5xl">
-                {frontmatter.title}
-            </h1>
+      <h1 class="page-title text-4xl md:text-5xl">
+        {frontmatter.title}
+      </h1>
 
-            <p class="mt-4 text-lg leading-8 text-gray-600">
-                {frontmatter.description}
-            </p>
+      <p class="page-copy max-w-2xl">
+        {frontmatter.description}
+      </p>
 
-            <div
-                class="mt-6 flex flex-wrap items-center gap-4 text-sm text-gray-500"
-            >
-                {publishedDate && <span>{publishedDate}</span>}
-                {
-                    updatedDate && (
-                        <span>Updated: {updatedDate}</span>
-                    )
-                }
-            </div>
-        </header>
+      <div class="mt-6 flex flex-wrap items-center gap-4 text-sm text-[var(--color-text-muted)]">
+        {publishedDate && <span>{publishedDate}</span>}
+        {
+          updatedDate && (
+            <span>Updated: {updatedDate}</span>
+          )
+        }
+      </div>
+    </header>
 
-        <div
-            class="prose prose-gray mt-10 max-w-none
-             prose-headings:tracking-tight
-             prose-h2:mt-12 prose-h2:text-2xl
-             prose-h3:mt-8 prose-h3:text-xl
-             prose-p:text-gray-700 prose-p:leading-8
-             prose-a:text-black prose-a:font-medium prose-a:no-underline hover:prose-a:underline
-             prose-strong:text-black
-             prose-code:rounded prose-code:bg-gray-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:text-[0.95em]
-             prose-pre:rounded-2xl prose-pre:border prose-pre:border-gray-200 prose-pre:bg-gray-950 prose-pre:p-5
-             prose-li:text-gray-700
-             prose-blockquote:border-l-gray-300 prose-blockquote:text-gray-600"
-        >
-            <slot />
-        </div>
-    </article>
+    <div class="article-prose">
+      <slot />
+    </div>
+  </article>
 </BaseLayout>

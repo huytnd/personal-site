@@ -5,11 +5,26 @@ import Header from "../components/Header.astro";
 const { title } = Astro.props;
 ---
 
-<html>
+<html lang="en" data-theme="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
+    <script is:inline>
+      (() => {
+        const storageKey = "theme-preference";
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        const storedTheme = window.localStorage.getItem(storageKey);
+        const theme = storedTheme === "light" || storedTheme === "dark"
+          ? storedTheme
+          : prefersDark
+            ? "dark"
+            : "light";
+
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
   </head>
 
   <body>
@@ -19,15 +34,15 @@ const { title } = Astro.props;
 
       <Header />
 
-      <main class="mx-auto w-full max-w-7xl px-5 py-8 sm:px-6 lg:px-10 md:py-12">
+      <main class="mx-auto w-full max-w-[96rem] px-6 py-10 sm:px-8 md:py-14 lg:px-12">
         <div class="site-panel">
           <slot />
         </div>
       </main>
 
-      <footer class="mx-auto w-full max-w-7xl px-5 pb-10 pt-2 text-center sm:px-6 lg:px-10">
+      <footer class="mx-auto w-full max-w-[96rem] px-6 pb-10 pt-2 text-center sm:px-8 lg:px-12">
         <div class="footer-panel">
-            <p class="footer-copy">&copy; {new Date().getFullYear()} Huy Tran. All rights reserved.</p>
+          <p class="footer-copy">&copy; {new Date().getFullYear()} Huy Tran. All rights reserved.</p>
         </div>
       </footer>
     </div>

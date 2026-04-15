@@ -32,21 +32,22 @@ const projects = [
 
 <BaseLayout title="Projects">
   <section>
-    <p class="text-sm font-semibold uppercase tracking-[0.2em] text-teal-700">
-      Portfolio
-    </p>
-
-    <h1 class="mt-4 text-4xl font-bold tracking-tight text-slate-950 md:text-5xl">
-      Selected Projects
-    </h1>
-
-    <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-600">
-      These projects reflect my current focus on backend engineering, cloud-oriented deployment,
-      and fullstack application delivery.
+    <p class="section-kicker">Portfolio</p>
+    <h1 class="page-title text-4xl md:text-5xl">Selected Projects</h1>
+    <p class="page-copy max-w-3xl">
+      These builds reflect the way I work: backend-first engineering, measurable delivery decisions,
+      and interfaces that stay clear under real operational constraints.
     </p>
   </section>
 
-  <section class="mt-12 grid gap-6 md:grid-cols-2">
+  <section class="mt-8 flex flex-wrap gap-3">
+    <span class="chip chip--neutral">APIs</span>
+    <span class="chip chip--neutral">Deployment</span>
+    <span class="chip chip--neutral">Fullstack delivery</span>
+    <span class="chip chip--neutral">Astro and .NET</span>
+  </section>
+
+  <section class="mt-12 portfolio-grid">
     {projects.map((project) => (
       <ProjectCard {...project} />
     ))}

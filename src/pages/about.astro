@@ -25,29 +25,33 @@ const contacts = [
 
 <BaseLayout title="About">
   <section class="py-4">
-    <div class="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-start">
+    <div class="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
       <div class="max-w-4xl">
-        <p class="text-sm font-semibold uppercase tracking-[0.2em] text-teal-700">About</p>
-        <h1 class="mt-4 text-4xl font-bold tracking-tight text-slate-950 md:text-5xl xl:text-6xl">Backend-focused, delivery-oriented, and infrastructure-aware.</h1>
-        <p class="mt-6 max-w-3xl text-lg leading-8 text-slate-600">
-          I work across backend systems, fullstack product delivery, and pragmatic deployment workflows.
+        <p class="section-kicker">About</p>
+        <h1 class="page-title text-4xl md:text-5xl xl:text-6xl">
+          Backend-focused, delivery-oriented, and infrastructure-aware.
+        </h1>
+        <p class="page-copy max-w-3xl">
+          I work across backend systems, fullstack delivery, and pragmatic deployment workflows.
           I care about readable code, stable releases, and making the operational side of software feel less fragile.
-          I write about deployment notes, backend implementation details, and lessons learned from building and shipping software on my <a href="/blog" class="text-slate-900 font-medium hover:underline">blog</a>.
-          
+          I write about deployment notes, backend implementation details, and lessons learned from building and shipping software on my
+          <a href="/blog" class="font-semibold text-[var(--color-text)] hover:underline"> blog</a>.
         </p>
-        <!--
+
         <div class="mt-8 grid gap-4 md:grid-cols-2">
-          <div class="rounded-[1.5rem] border border-slate-200/80 bg-white/80 p-5">
-            <h2 class="text-lg font-semibold text-slate-950">What I build</h2>
-            <p class="mt-3 text-sm leading-7 text-slate-600">APIs, internal tools, deployment-friendly apps, and portfolio projects that emphasize clear engineering tradeoffs.</p>
+          <div class="surface-card">
+            <p class="eyebrow-label">What I build</p>
+            <p class="mt-3 text-base leading-7 text-[var(--color-text-muted)]">
+              APIs, internal tools, deployment-friendly apps, and portfolio projects with explicit engineering tradeoffs.
+            </p>
           </div>
-          <div class="rounded-[1.5rem] border border-slate-200/80 bg-white/80 p-5">
-            <h2 class="text-lg font-semibold text-slate-950">What I write about</h2>
-            <p class="mt-3 text-sm leading-7 text-slate-600">Deployment notes, backend implementation details, and lessons learned from building and shipping software.</p>
+          <div class="surface-card">
+            <p class="eyebrow-label">What I write about</p>
+            <p class="mt-3 text-base leading-7 text-[var(--color-text-muted)]">
+              Deployment notes, backend implementation details, and practical lessons from shipping software.
+            </p>
           </div>
         </div>
-        -->
-
       </div>
 
       <aside class="portrait-shell">
@@ -66,8 +70,8 @@ const contacts = [
       </aside>
     </div>
 
-    <div class="mt-14 border-t border-slate-200/70 pt-10">
-      <p class="text-sm font-semibold uppercase tracking-[0.2em] text-teal-700">Contact</p>
+    <div class="mt-14 border-t pt-10" style="border-color: var(--color-border);">
+      <p class="section-kicker">Contact</p>
       <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {
           contacts.map((contact) => (
@@ -75,13 +79,17 @@ const contacts = [
               href={contact.href}
               target={contact.href.startsWith("http") ? "_blank" : undefined}
               rel={contact.href.startsWith("http") ? "noreferrer" : undefined}
-              class="rounded-[1.5rem] border border-slate-200/80 bg-white/80 p-5 transition hover:-translate-y-1 hover:bg-white"
+              class="surface-card surface-card--interactive"
             >
               <div class="flex items-center gap-4">
                 <span
                   class:list={[
-                    "inline-flex h-12 w-12 items-center justify-center rounded-2xl text-white",
-                    contact.icon === "linkedin" ? "bg-[#0A66C2]" : "bg-slate-950",
+                    "inline-flex h-12 w-12 items-center justify-center rounded-2xl text-white shadow-lg shadow-black/10",
+                    contact.icon === "linkedin"
+                      ? "bg-[#0A66C2]"
+                      : contact.icon === "mail"
+                        ? "bg-[var(--color-accent)]"
+                        : "bg-[var(--color-primary-strong)]",
                   ]}
                 >
                   <span class="sr-only">{contact.srLabel}</span>
@@ -102,7 +110,10 @@ const contacts = [
                     )
                   }
                 </span>
-                <p class="text-base font-semibold text-slate-950">{contact.value}</p>
+                <div>
+                  <p class="eyebrow-label">{contact.srLabel}</p>
+                  <p class="mt-1 text-base font-semibold text-[var(--color-text)]">{contact.value}</p>
+                </div>
               </div>
             </a>
           ))
