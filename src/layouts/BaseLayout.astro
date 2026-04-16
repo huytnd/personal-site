@@ -2,7 +2,23 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 
-const { title } = Astro.props;
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  canonicalURL?: string;
+}
+
+const { 
+  title,
+  description = 'Technical blog and project portfolio of Huy Tran, a backend and cloud engineer. Explore production-ready software, system design, and deployment insights.',
+  image = '/images/og-image.jpg',
+  canonicalURL
+} = Astro.props;
+
+const site = Astro.site?.toString() ?? 'https://huytnd.io.vn'
+const canonical = canonicalURL ?? new URL(Astro.url.pathname, site).toString();
+const ogImage = new URL(image, site).toString();
 ---
 
 <html lang="en" data-theme="light">
@@ -11,6 +27,20 @@ const { title } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="alternate" type="application/rss+xml" title="Huy Tran Blog RSS" href="/rss.xml" />
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonical} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
     <script is:inline>
       (() => {
         const storageKey = "theme-preference";
@@ -25,6 +55,16 @@ const { title } = Astro.props;
         document.documentElement.dataset.theme = theme;
         document.documentElement.style.colorScheme = theme;
       })();
+    </script>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LCYQ4SKTG1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-LCYQ4SKTG1');
     </script>
   </head>
 
