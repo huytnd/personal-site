@@ -1,20 +1,28 @@
 ---
 import { Picture } from "astro:assets";
 
-const { src, alt } = Astro.props;
+const { src, alt = '', priority = false, } = Astro.props;
 ---
 
 {src && (
-    <Picture 
-        src={src} 
-        alt={alt || ''}
-        formats={['avif','webp']}
-        fallbackFormat="png"
-        widths={[480,1024,1280]}
-        sizes="(max-width: 768px) 100vw, 768px"
-        loading="eager"
-        decoding="async"
-        class="blog-cover"
-        layout="constrained" 
-    />
+    <figure class="my-6">
+        <Picture 
+            src={src} 
+            alt={alt}
+            formats={['avif','webp']}
+            fallbackFormat="png"
+            widths={[480, 768, 1024, 1280]}
+            sizes="(max-width: 768px) 100vw, 768px"
+            loading={priority ? 'eager' : 'lazy'}
+            decoding="async"
+            class="rounded-2xl shadow-md w-full h-auto"
+            layout="constrained" 
+        />
+
+        {alt && (
+            <figcaption class="mt-2 text-sm italic text-center text-gray-500">
+                 - {alt} - 
+            </figcaption>
+        )}
+    </figure>
 )}

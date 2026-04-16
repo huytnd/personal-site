@@ -1,5 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
 import BlogCover from '../../components/BlogCover.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 
@@ -19,28 +19,18 @@ if (!post || post.data.draft) {
 }
 
 const { Content } = await render(post);
-
-// Route OG image động cho từng bài
-const dynamicOgImage = `/open-graph/${post.slug}.png`;
 ---
 
-<BaseLayout
-  title={post.data.title}
-  description={post.data.description}
-  image={dynamicOgImage}
-  type="article"
-  publishedDate={post.data.publishedDate.toISOString()}
-  updatedDate={post.data.updatedDate?.toISOString()}
+<BlogPostLayout 
+  frontmatter={post.data}
+  category={post.data.category}
 >
-  <article>
-    <h1>{post.data.title}</h1>
-
-    <p>
-      {post.data.publishedDate.toLocaleDateString('vi-VN')}
-    </p>
-
-    <BlogCover src={post.data.coverImage} alt={post.data.coverAlt} />
-
-    <Content />
-  </article>
-</BaseLayout>
+  {post.data.coverImage && (
+    <BlogCover 
+      src={post.data.coverImage} 
+      alt={post.data.coverAlt} 
+      priority={true} 
+    />
+  )}
+  <Content />
+</BlogPostLayout>
