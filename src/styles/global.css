@@ -75,6 +75,7 @@ html[data-theme="dark"] {
   --elevation-3: 0 14px 30px rgba(0, 0, 0, 0.38), 0 6px 14px rgba(0, 0, 0, 0.22);
   --state-hover: color-mix(in srgb, var(--md-sys-color-on-surface) 10%, transparent);
   --state-focus: color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent);
+  --logo-primary: #E5E7EB;
 }
 
 :root {
@@ -94,6 +95,8 @@ html[data-theme="dark"] {
   --color-accent-soft: color-mix(in srgb, var(--md-sys-color-tertiary-container) 60%, transparent);
   --shadow-soft: var(--elevation-2);
   --shadow-raised: var(--elevation-1);
+  --logo-primary: #0F172A;
+  --logo-accent: #38BDF8;
 }
 
 html {

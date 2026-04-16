@@ -1,0 +1,17 @@
+<svg width="220" height="80" viewBox="0 0 220 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .text { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-weight: 600; }
+  </style>
+
+  <!-- Left bracket -->
+  <text x="10" y="55" class="text" font-size="40" fill="#38BDF8">&lt;</text>
+
+  <!-- HT -->
+  <text x="50" y="55" class="text" font-size="40" fill="#E5E7EB">HT</text>
+
+  <!-- Slash -->
+  <text x="110" y="55" class="text" font-size="40" fill="#38BDF8">/</text>
+
+  <!-- Right bracket -->
+  <text x="140" y="55" class="text" font-size="40" fill="#38BDF8">&gt;</text>
+</svg>

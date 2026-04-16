@@ -1,74 +1,46 @@
 ---
-import BlogPostLayout from "../../layouts/BlogPostLayout.astro";
-
-type BlogModule = {
-  Content: any;
-  frontmatter: {
-    title: string;
-    description: string;
-    publishedDate: string | Date;
-    updatedDate?: string | Date;
-    category?: string;
-    tags?: string[];
-  };
-};
-
-const blogModules = import.meta.glob("../../content/blog/**/*.{md,mdx}", {
-  eager: true,
-}) as Record<string, BlogModule>;
-
-const resolveCategory = (postId: string, frontmatterCategory?: string) =>
-  frontmatterCategory?.trim() ||
-  (postId.includes("/") ? postId.split("/")[0] : "uncategorized");
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCover from '../../components/BlogCover.astro';
+import { getCollection, getEntry, render } from 'astro:content';
 
 export async function getStaticPaths() {
-  const modules = import.meta.glob("../../content/blog/**/*.{md,mdx}", {
-    eager: true,
-  }) as Record<string, BlogModule>;
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
 
-  return Object.entries(modules).map(([filePath]) => ({
-    params: {
-      slug: filePath
-        .replace("../../content/blog/", "")
-        .replace(/\.(md|mdx)$/, ""),
-    },
+  return posts.map((post) => ({
+    params: { slug: post.id },
   }));
 }
 
-const slugParam = Astro.params.slug;
-const postId = Array.isArray(slugParam) ? slugParam.join("/") : slugParam;
-const posts = Object.entries(blogModules).map(([filePath, module]) => {
-  const relativePath = filePath
-    .replace("../../content/blog/", "")
-    .replace(/\.(md|mdx)$/, "");
+const { slug } = Astro.params;
+const post = await getEntry('blog', slug!);
 
-  return {
-    id: relativePath,
-    category: resolveCategory(relativePath, module.frontmatter.category),
-    Content: module.Content,
-    data: {
-      ...module.frontmatter,
-      publishedDate: new Date(module.frontmatter.publishedDate),
-      updatedDate: module.frontmatter.updatedDate
-        ? new Date(module.frontmatter.updatedDate)
-        : undefined,
-    },
-  };
-});
-
-if (!postId) {
-  throw new Error("Post slug is required");
+if (!post || post.data.draft) {
+  return Astro.redirect('/404');
 }
 
-const post = posts.find((entry) => entry.id === postId);
+const { Content } = await render(post);
 
-if (!post) {
-  throw new Error(`Post not found: ${postId}`);
-}
-
-const { Content } = post;
+// Route OG image động cho từng bài
+const dynamicOgImage = `/open-graph/${post.slug}.png`;
 ---
 
-<BlogPostLayout frontmatter={post.data} category={post.category}>
-  <Content />
-</BlogPostLayout>
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  image={dynamicOgImage}
+  type="article"
+  publishedDate={post.data.publishedDate.toISOString()}
+  updatedDate={post.data.updatedDate?.toISOString()}
+>
+  <article>
+    <h1>{post.data.title}</h1>
+
+    <p>
+      {post.data.publishedDate.toLocaleDateString('vi-VN')}
+    </p>
+
+    <BlogCover src={post.data.coverImage} alt={post.data.coverAlt} />
+
+    <Content />
+  </article>
+</BaseLayout>

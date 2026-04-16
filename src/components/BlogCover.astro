@@ -1,0 +1,20 @@
+---
+import { Picture } from "astro:assets";
+
+const { src, alt } = Astro.props;
+---
+
+{src && (
+    <Picture 
+        src={src} 
+        alt={alt || ''}
+        formats={['avif','webp']}
+        fallbackFormat="png"
+        widths={[480,1024,1280]}
+        sizes="(max-width: 768px) 100vw, 768px"
+        loading="eager"
+        decoding="async"
+        class="blog-cover"
+        layout="constrained" 
+    />
+)}
