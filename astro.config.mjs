@@ -7,9 +7,13 @@ import tailwind from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://huytnd.io.vn',
-  trailingSlash: 'always',
+  site: 'https://huytnd.io.vn', 
+  trailingSlash: 'never',
   integrations: [mdx(), sitemap()],
+  image: {
+    layout: 'constrained',
+    responsiveStyles: true
+  },
   vite: {
     plugins: [tailwind()],
     resolve: {
