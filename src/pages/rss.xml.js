@@ -6,7 +6,7 @@ export async function GET(context) {
 
   const publishedPosts = posts
     .filter((post) => !post.data.draft)
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+    .sort((a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf());
 
   return rss({
     title: 'Huy Tran Blog',
@@ -14,7 +14,7 @@ export async function GET(context) {
     site: context.site,
     items: publishedPosts.map((post) => ({
       title: post.data.title,
-      pubDate: post.data.pubDate,
+      pubDate: post.data.publishedDate,
       description: post.data.description,
       link: `/blog/${post.slug ?? post.id}/`,
     })),
