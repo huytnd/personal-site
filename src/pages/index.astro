@@ -1,32 +1,19 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
 import { projects } from "@/data/projects";
 
 const featuredProjects = projects;
 
-const blogModules = import.meta.glob("../content/blog/**/*.{md,mdx}", {
-  eager: true,
-});
+const latestPosts = (await getCollection("blog", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime())
+  .slice(0, 3);
 
-const latestPosts = Object.entries(blogModules)
-  .map(([filePath, module]) => {
-    const relativePath = filePath
-      .replace("../content/blog/", "")
-      .replace(/\.(md|mdx)$/, "");
-
-    return {
-      id: relativePath,
-      title: module.frontmatter.title,
-      description: module.frontmatter.description,
-      publishedDate: new Date(module.frontmatter.publishedDate),
-      category: module.frontmatter.category || "General",
-    };
-  })
-  .sort((a, b) => b.publishedDate.getTime() - a.publishedDate.getTime())
-  .slice(0, 3); // Get 3 latest posts
+const pageDescription =
+  "Huy Tran is a software engineer focused on scalable .NET backend systems, cloud architecture, observability, and production-minded delivery.";
 ---
 
-<BaseLayout title="Huy Tran - Software Engineer">
+<BaseLayout title="Huy Tran - Software Engineer" description={pageDescription}>
   <!-- HERO SECTION với Three.js Animation -->
   <section class="relative min-h-screen flex items-center overflow-hidden bg-white dark:bg-[#0F172A]">
     <!-- Three.js Canvas -->
@@ -174,15 +161,15 @@ const latestPosts = Object.entries(blogModules)
         {latestPosts.map((post) => (
           <article class="scroll-fade group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 hover:border-accent-light transition-all flex flex-col">
             <div class="text-xs uppercase tracking-widest text-slate-500 mb-4">
-              {post.publishedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+              {post.data.publishedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
             </div>
             
             <h3 class="font-semibold text-xl leading-tight group-hover:text-accent dark:group-hover:text-accent-light transition-colors">
-              <a href={`/blog/${post.id}`}>{post.title}</a>
+              <a href={`/blog/${post.id}`}>{post.data.title}</a>
             </h3>
 
             <p class="mt-4 text-slate-600 dark:text-slate-400 line-clamp-3 flex-1">
-              {post.description}
+              {post.data.description}
             </p>
 
             <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700">
@@ -247,10 +234,12 @@ const latestPosts = Object.entries(blogModules)
       "Designing clean & observable architecture",
       "Shipping reliable .NET applications"
     ];
-    let i = 0, j = 0, current = "", isDeleting = false;
+    let i = 0, current = "", isDeleting = false;
     const typingEl = document.getElementById("typing");
 
     function type() {
+      if (!typingEl) return;
+
       const phrase = phrases[i];
       if (isDeleting) current = phrase.substring(0, current.length - 1);
       else current = phrase.substring(0, current.length + 1);

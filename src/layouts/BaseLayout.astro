@@ -22,6 +22,9 @@ const {
 } = Astro.props;
 
 const site = Astro.site?.toString() ?? 'https://huytnd.io.vn'
+const defaultDescription =
+  "Huy Tran is a software engineer focused on scalable backend systems, cloud architecture, observability, and production-minded delivery.";
+const pageDescription = description ?? defaultDescription;
 const canonical = canonicalURL ?? new URL(Astro.url.pathname, site).href;
 const ogImage = image
   ? new URL(image, site).href 
@@ -33,7 +36,7 @@ const jsonLd =
       "@context": "https://schema.org",
       "@type": "BlogPosting",
       headline: title,
-      description,
+      description: pageDescription,
       image: [ogImage],
       datePublished: publishedDate || new Date().toISOString(),
       dateModified: updatedDate ? updatedDate : publishedDate || new Date().toISOString(),
@@ -47,7 +50,7 @@ const jsonLd =
       "@context": "https://schema.org",
       "@type": "WebPage",
       headline: title,
-      description,
+      description: pageDescription,
       url: canonical
     };
 ---
@@ -58,7 +61,7 @@ const jsonLd =
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="alternate" type="application/rss+xml" title="Huy Tran Blog RSS" href="/rss.xml" />
     <title>{title} - Huy Tran | Software Engineer</title>
-    <meta name="description" content={description} />
+    <meta name="description" content={pageDescription} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" type="image/svg+xml" href="/favicon-dark.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-dark.png" />
@@ -67,25 +70,26 @@ const jsonLd =
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={type} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:url" content={canonical} />
 
     <!-- Twitter / X -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content={ogImage} />
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
 
     <!-- Structured Data -->
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
     <script is:inline>
       (() => {
         const root = document.documentElement;
+        root.classList.add('js');
         const storedTheme = window.localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         const isDark = storedTheme ? storedTheme === 'dark' : prefersDark;
@@ -104,8 +108,8 @@ const jsonLd =
     </style>
     
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LCYQ4SKTG1"></script>
-    <script>
+    <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-LCYQ4SKTG1"></script>
+    <script is:inline>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
@@ -124,7 +128,7 @@ const jsonLd =
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-950 text-slate-400 py-12 mt-24">
+    <footer class="site-footer bg-slate-950 text-slate-400 py-12 mt-24">
       <div class="max-w-7xl mx-auto px-6 text-center text-sm">
         <p>© {new Date().getFullYear()} Huy Tran • Software Engineer</p>
         <p class="mt-2 text-xs text-slate-500">
