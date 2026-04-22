@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
+import BlogCover from "../components/BlogCover.astro";
 
 const { frontmatter, category } = Astro.props;
 
@@ -23,10 +24,12 @@ const updatedDate = formatDate(frontmatter.updatedDate);
 <BaseLayout title={frontmatter.title} 
     description={frontmatter.description} 
     publishedDate={frontmatter.publishedDate}
+    updatedDate={frontmatter.updatedDate}
     type="article">
   <article class="article-shell">
     <a href="/blog" class="article-link">
-      ← Back to blog
+      <span aria-hidden="true">&lt;-</span>
+      Back to blog
     </a>
 
     <header class="article-header">
@@ -43,11 +46,11 @@ const updatedDate = formatDate(frontmatter.updatedDate);
         }
       </div>
 
-      <h1 class="page-title text-4xl md:text-5xl">
+      <h1 class="page-title mt-6 max-w-4xl text-5xl text-slate-950 dark:text-white md:text-6xl">
         {frontmatter.title}
       </h1>
 
-      <p class="page-copy max-w-2xl">
+      <p class="page-copy max-w-3xl">
         {frontmatter.description}
       </p>
 
@@ -59,10 +62,33 @@ const updatedDate = formatDate(frontmatter.updatedDate);
           )
         }
       </div>
+
+      {
+        frontmatter.coverImage && (
+          <div class="article-cover">
+            <BlogCover
+              src={frontmatter.coverImage}
+              alt={frontmatter.coverAlt}
+              priority={true}
+            />
+          </div>
+        )
+      }
     </header>
 
     <div class="article-prose">
       <slot />
     </div>
+
+    <footer class="article-footer-nav">
+      <a href="/blog" class="action-button action-button--tonal">
+        <span aria-hidden="true">&lt;-</span>
+        Back to blog
+      </a>
+      <a href="/rss.xml" class="blog-text-link">
+        More writing via RSS
+        <span aria-hidden="true">-></span>
+      </a>
+    </footer>
   </article>
 </BaseLayout>

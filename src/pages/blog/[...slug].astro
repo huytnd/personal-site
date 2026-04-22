@@ -1,6 +1,5 @@
 ---
 import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
-import BlogCover from '../../components/BlogCover.astro';
 import { getCollection, getEntry, render } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -25,12 +24,5 @@ const { Content } = await render(post);
   frontmatter={post.data}
   category={post.data.category}
 >
-  {post.data.coverImage && (
-    <BlogCover 
-      src={post.data.coverImage} 
-      alt={post.data.coverAlt} 
-      priority={true} 
-    />
-  )}
   <Content />
 </BlogPostLayout>

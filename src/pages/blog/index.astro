@@ -1,132 +1,204 @@
 ---
+import { Image } from "astro:assets";
+import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-type BlogModule = {
-  frontmatter: {
-    title: string;
-    description: string;
-    publishedDate: string | Date;
-    updatedDate?: string | Date;
-    category?: string;
-    tags?: string[];
-  };
-};
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime(),
+);
 
-const blogModules = import.meta.glob("../../content/blog/**/*.{md,mdx}", {
-  eager: true,
-}) as Record<string, BlogModule>;
+const featuredPost = posts.find((post) => post.data.featured) ?? posts[0];
+const latestPosts = featuredPost
+  ? posts.filter((post) => post.id !== featuredPost.id)
+  : posts;
 
-const resolveCategory = (postId: string, frontmatterCategory?: string) =>
-  frontmatterCategory?.trim() ||
-  (postId.includes("/") ? postId.split("/")[0] : "uncategorized");
+const formatDate = (value: Date) =>
+  new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(value);
 
-const posts = Object.entries(blogModules)
-  .map(([filePath, module]) => {
-    const relativePath = filePath
-      .replace("../../content/blog/", "")
-      .replace(/\.(md|mdx)$/, "");
-
-    return {
-      id: relativePath,
-      data: {
-        ...module.frontmatter,
-        publishedDate: new Date(module.frontmatter.publishedDate),
-        updatedDate: module.frontmatter.updatedDate
-          ? new Date(module.frontmatter.updatedDate)
-          : undefined,
-      },
-    };
-  })
-  .sort(
-    (a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime(),
-  );
-
-const formatCategory = (category: string) =>
-  category
+const formatCategory = (value: string | undefined) =>
+  (value?.trim() || "General")
     .split(/[-_]/)
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
 
-const postsByCategory = posts.reduce<
-  Array<{
-    category: string;
-    label: string;
-    posts: Array<(typeof posts)[number]>;
-  }>
->((groups, post) => {
-  const category = resolveCategory(post.id, post.data.category);
-  const existingGroup = groups.find((group) => group.category === category);
+const categories = Array.from(
+  new Set(posts.map((post) => formatCategory(post.data.category))),
+);
 
-  if (existingGroup) {
-    existingGroup.posts.push(post);
-    return groups;
-  }
-
-  groups.push({
-    category,
-    label: formatCategory(category),
-    posts: [post],
-  });
-
-  return groups;
-}, []);
+const tags = Array.from(new Set(posts.flatMap((post) => post.data.tags))).slice(
+  0,
+  8,
+);
 ---
 
-<BaseLayout title="Blog">
-  <section>
-    <p class="section-kicker">Writing</p>
-    <h1 class="page-title text-4xl md:text-5xl">Blog</h1>
-    <p class="page-copy max-w-2xl">
-      Notes about backend engineering, deployment, cloud learning, and lessons from building projects.
-    </p>
+<BaseLayout
+  title="Blog"
+  description="Technical notes about backend engineering, deployment, Astro, cloud learning, and lessons from building production-minded projects."
+>
+  <section class="blog-hero">
+    <div class="max-w-4xl">
+      <p class="section-kicker">Writing</p>
+      <h1 class="page-title mt-3 text-5xl text-slate-950 dark:text-white md:text-6xl xl:text-7xl">
+        Engineering notes from the build side.
+      </h1>
+      <p class="page-copy max-w-3xl">
+        Practical writing about backend architecture, deployment workflows, Astro, cloud systems,
+        and the small decisions that make software easier to ship and operate.
+      </p>
+    </div>
+
+    <div class="blog-summary-grid">
+      <div>
+        <p class="eyebrow-label">Articles</p>
+        <p class="mt-2 text-4xl font-semibold tracking-tight text-[#0A2540] dark:text-[#60A5FA]">
+          {posts.length}
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow-label">Topics</p>
+        <p class="mt-2 text-4xl font-semibold tracking-tight text-[#0A2540] dark:text-[#60A5FA]">
+          {categories.length}
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow-label">Focus</p>
+        <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">
+          Backend systems, deployment, and technical project notes.
+        </p>
+      </div>
+    </div>
   </section>
 
-  <section class="mt-12 space-y-12">
-    {
-      postsByCategory.map((group) => (
-        <div>
-          <div class="mb-5 flex flex-wrap items-center gap-3">
-            <h2 class="text-2xl font-semibold tracking-tight text-[var(--color-text)]">
-              {group.label}
+  {
+    posts.length > 0 && (
+      <section class="blog-section mt-12 flex flex-wrap gap-3">
+        {categories.map((category) => (
+          <span class="chip chip--neutral">{category}</span>
+        ))}
+        {tags.map((tag) => (
+          <span class="chip">#{tag}</span>
+        ))}
+      </section>
+    )
+  }
+
+  {
+    featuredPost && (
+      <section class="blog-section mt-16">
+        <div class="mb-6 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p class="section-kicker">Featured</p>
+            <h2 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">
+              Start here
             </h2>
-            <span class="chip chip--neutral">
-              {group.posts.length} post{group.posts.length > 1 ? "s" : ""}
-            </span>
           </div>
-
-          <div class="space-y-6">
-            {group.posts.map((post) => (
-              <article class="surface-card surface-card--interactive">
-                <div class="flex flex-wrap gap-2">
-                  {post.data.tags?.map((tag) => (
-                    <span class="chip">#{tag}</span>
-                  ))}
-                </div>
-
-                <h3 class="mt-4 text-2xl font-semibold tracking-tight text-[var(--color-text)]">
-                  <a href={`/blog/${post.id}`} class="hover:underline">
-                    {post.data.title}
-                  </a>
-                </h3>
-
-                <p class="mt-3 text-sm text-[var(--color-text-muted)]">
-                  {post.data.publishedDate.toDateString()}
-                </p>
-
-                <p class="mt-4 leading-7 text-[var(--color-text-muted)]">
-                  {post.data.description}
-                </p>
-
-                <div class="mt-5">
-                  <a href={`/blog/${post.id}`} class="action-button action-button--tonal">
-                    Read article
-                  </a>
-                </div>
-              </article>
-            ))}
-          </div>
+          <a href="/rss.xml" class="blog-text-link">
+            RSS feed
+            <span aria-hidden="true">-></span>
+          </a>
         </div>
-      ))
-    }
-  </section>
+
+        <article class="featured-post-card">
+          <a href={`/blog/${featuredPost.id}`} class="featured-post-media group" aria-label={`Read ${featuredPost.data.title}`}>
+            {featuredPost.data.coverImage ? (
+              <Image
+                src={featuredPost.data.coverImage}
+                alt={featuredPost.data.coverAlt || ""}
+                widths={[640, 960, 1280]}
+                sizes="(max-width: 1024px) 100vw, 44rem"
+                class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              />
+            ) : (
+              <div class="featured-post-placeholder">
+                <span class="font-mono text-7xl tracking-tighter text-white/20">01</span>
+              </div>
+            )}
+          </a>
+
+          <div class="flex min-w-0 flex-col p-6 md:p-8 lg:p-10">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="chip">{formatCategory(featuredPost.data.category)}</span>
+              <span class="text-sm text-slate-500 dark:text-slate-400">
+                {formatDate(featuredPost.data.publishedDate)}
+              </span>
+            </div>
+
+            <h3 class="mt-5 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">
+              <a href={`/blog/${featuredPost.id}`} class="hover:text-[#0A2540] dark:hover:text-[#60A5FA]">
+                {featuredPost.data.title}
+              </a>
+            </h3>
+
+            <p class="mt-5 text-base leading-8 text-slate-600 dark:text-slate-300 md:text-lg">
+              {featuredPost.data.description}
+            </p>
+
+            <div class="mt-6 flex flex-wrap gap-2">
+              {featuredPost.data.tags.map((tag) => (
+                <span class="chip chip--neutral">#{tag}</span>
+              ))}
+            </div>
+
+            <div class="mt-8">
+              <a href={`/blog/${featuredPost.id}`} class="action-button action-button--filled">
+                Read article
+                <span aria-hidden="true">-></span>
+              </a>
+            </div>
+          </div>
+        </article>
+      </section>
+    )
+  }
+
+  {
+    latestPosts.length > 0 && (
+      <section class="blog-section mt-20">
+        <div class="mb-8">
+          <p class="section-kicker">Latest</p>
+          <h2 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">
+            More articles
+          </h2>
+        </div>
+
+        <div class="blog-post-grid">
+          {latestPosts.map((post) => (
+            <article class="blog-post-card">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="chip">{formatCategory(post.data.category)}</span>
+                <span class="text-sm text-slate-500 dark:text-slate-400">
+                  {formatDate(post.data.publishedDate)}
+                </span>
+              </div>
+
+              <h3 class="mt-5 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">
+                <a href={`/blog/${post.id}`} class="hover:text-[#0A2540] dark:hover:text-[#60A5FA]">
+                  {post.data.title}
+                </a>
+              </h3>
+
+              <p class="mt-4 line-clamp-3 leading-7 text-slate-600 dark:text-slate-400">
+                {post.data.description}
+              </p>
+
+              <div class="mt-6 flex flex-wrap gap-2">
+                {post.data.tags.slice(0, 4).map((tag) => (
+                  <span class="chip chip--neutral">#{tag}</span>
+                ))}
+              </div>
+
+              <a href={`/blog/${post.id}`} class="blog-card-link">
+                Read article
+                <span aria-hidden="true">-></span>
+              </a>
+            </article>
+          ))}
+        </div>
+      </section>
+    )
+  }
 </BaseLayout>
