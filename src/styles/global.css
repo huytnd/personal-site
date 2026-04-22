@@ -491,6 +491,209 @@ body {
   }
 }
 
+/* ====================== ABOUT ====================== */
+
+.about-hero,
+.about-section {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 80rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.about-hero {
+  display: grid;
+  gap: 2.5rem;
+  padding-top: 3.5rem;
+}
+
+.about-hero-copy {
+  min-width: 0;
+}
+
+.about-section {
+  margin-top: 4rem;
+}
+
+.portrait-shell {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(135deg, rgb(10 37 64 / 0.95), rgb(30 64 175 / 0.82)),
+    var(--color-surface-raised);
+  box-shadow: var(--shadow-raised);
+  min-height: 30rem;
+}
+
+.portrait-shell::after {
+  content: "";
+  position: absolute;
+  inset: auto 1.5rem 1.5rem 1.5rem;
+  height: 5rem;
+  border-radius: 9999px;
+  background: rgb(96 165 250 / 0.22);
+  filter: blur(2.5rem);
+  pointer-events: none;
+}
+
+.portrait-image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  height: 100%;
+  min-height: 30rem;
+  width: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.portrait-placeholder {
+  position: relative;
+  z-index: 1;
+  min-height: 30rem;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+}
+
+.about-profile-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.about-profile-card {
+  border: 1px solid var(--color-border);
+  border-radius: 1.5rem;
+  background: var(--color-surface-raised);
+  padding: 1.5rem;
+}
+
+.about-story-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.about-care-panel {
+  display: grid;
+  gap: 2rem;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: 1.5rem;
+  background:
+    linear-gradient(135deg, rgb(96 165 250 / 0.1), transparent 45%),
+    var(--color-surface-raised);
+  padding: 1.5rem;
+}
+
+.about-care-list {
+  display: grid;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+}
+
+.about-care-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.875rem;
+  list-style: none;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+}
+
+.about-care-list span[aria-hidden="true"] {
+  margin-top: 0.2rem;
+  display: inline-flex;
+  height: 2rem;
+  width: 2rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: rgb(96 165 250 / 0.12);
+  color: var(--color-accent);
+}
+
+.about-contact-header {
+  display: grid;
+  gap: 1rem;
+  border-top: 1px solid var(--color-border);
+  padding-top: 3rem;
+}
+
+.about-contact-grid {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.about-contact-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1.5rem;
+  background: var(--color-surface-raised);
+  padding: 1.25rem;
+  text-decoration: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.about-contact-card:hover {
+  border-color: rgb(96 165 250 / 0.7);
+  box-shadow: var(--shadow-raised);
+  transform: translateY(-3px);
+}
+
+.about-contact-card:focus-visible {
+  outline: 3px solid rgb(96 165 250 / 0.45);
+  outline-offset: 3px;
+}
+
+.about-contact-icon {
+  display: inline-flex;
+  height: 3rem;
+  width: 3rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  color: white;
+  box-shadow: 0 16px 30px -18px rgb(15 23 42 / 0.7);
+}
+
+@media (min-width: 768px) {
+  .about-profile-grid,
+  .about-contact-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .about-story-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-care-panel {
+    padding: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .about-hero {
+    grid-template-columns: minmax(0, 1.15fr) minmax(20rem, 0.85fr);
+    align-items: center;
+  }
+
+  .about-contact-header,
+  .about-care-panel {
+    grid-template-columns: minmax(0, 1fr) minmax(22rem, 0.72fr);
+    align-items: start;
+  }
+}
+
 /* ====================== UTILITIES ====================== */
 
 .line-clamp-3 {
