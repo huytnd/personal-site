@@ -1,6 +1,8 @@
 import { getCollection } from 'astro:content';
 import { OGImageRoute } from 'astro-og-canvas';
 
+const localOgFont = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf';
+
 const posts = await getCollection('blog', ({ data }) => !data.draft);
 
 const pages = Object.fromEntries(
@@ -25,5 +27,14 @@ export const { getStaticPaths, GET } = await OGImageRoute({
   getImageOptions: (_path, page) => ({
     title: page.title,
     description: page.description,
+    fonts: [localOgFont],
+    font: {
+      title: {
+        families: ['DejaVu Sans'],
+      },
+      description: {
+        families: ['DejaVu Sans'],
+      },
+    },
   }),
 });

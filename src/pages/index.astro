@@ -4,112 +4,355 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 const featuredProjects = [
   {
     title: "Fullstack Task Manager",
-    description:
-      "A production-style fullstack application with ASP.NET Core, PostgreSQL, and Docker.",
-    meta: "System design, auth flows, delivery workflow",
+    description: "Production-style fullstack application with clean architecture, authentication, real-time updates, and complete CI/CD pipeline.",
+    meta: ".NET • PostgreSQL • Docker • Tailwind",
+    slug: "/projects/task-manager",
   },
   {
     title: "URL Shortener API",
-    description:
-      "A backend-focused service with clean API design, analytics, and containerized deployment.",
-    meta: "API design, metrics, persistence",
+    description: "High-performance backend service featuring analytics, rate limiting, caching, and fully containerized deployment.",
+    meta: "ASP.NET Core • Redis • Docker • Metrics",
+    slug: "/projects/url-shortener",
   },
   {
     title: "Personal Portfolio Platform",
-    description:
-      "A self-hosted Astro website and blog deployed on a VPS with Dokploy.",
-    meta: "Design system, content architecture, deployment",
+    description: "This website — built with Astro, MDX, Tailwind, and deployed using modern DevOps practices on VPS.",
+    meta: "Astro • Tailwind • Three.js • Dokploy",
+    slug: "/projects/portfolio",
   },
 ];
 
-const highlights = [
-  { value: "4+", label: "Core delivery areas across backend, infra, and frontend" },
-  { value: "Remote", label: "Working from Ho Chi Minh City with async-friendly workflows" },
-  { value: "Build", label: "Calm releases, practical architecture, and operational clarity" },
-];
+const blogModules = import.meta.glob("../content/blog/**/*.{md,mdx}", {
+  eager: true,
+});
+
+const latestPosts = Object.entries(blogModules)
+  .map(([filePath, module]) => {
+    const relativePath = filePath
+      .replace("../content/blog/", "")
+      .replace(/\.(md|mdx)$/, "");
+
+    return {
+      id: relativePath,
+      title: module.frontmatter.title,
+      description: module.frontmatter.description,
+      publishedDate: new Date(module.frontmatter.publishedDate),
+      category: module.frontmatter.category || "General",
+    };
+  })
+  .sort((a, b) => b.publishedDate.getTime() - a.publishedDate.getTime())
+  .slice(0, 3); // Get 3 latest posts
 ---
 
-<BaseLayout title="Welcome">
-  <section class="grid gap-8 py-4 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:py-8">
-    <div>
-      <p class="section-kicker">Backend / Cloud Engineer</p>
-      <h1 class="page-title max-w-4xl text-5xl leading-[1.02] md:text-6xl xl:text-[4.5rem]">
-        Production-ready software shaped with Material clarity.
-      </h1>
-      <p class="page-copy max-w-2xl text-[1.08rem]">
-        I build backend-first web applications with dependable delivery pipelines,
-        then document the architectural and deployment decisions behind them.
-      </p>
+<BaseLayout title="Huy Tran - Software Engineer">
+  <!-- HERO SECTION với Three.js Animation -->
+  <section class="relative min-h-screen flex items-center overflow-hidden bg-white dark:bg-[#0F172A]">
+    <!-- Three.js Canvas -->
+    <canvas id="hero-canvas" class="absolute inset-0 z-0"></canvas>
 
-      <div class="mt-8 flex flex-wrap gap-4">
-        <a href="/projects" class="action-button action-button--filled">View Projects</a>
-        <a href="/blog" class="action-button action-button--tonal">Read Blog</a>
-      </div>
+    <div class="relative z-10 max-w-5xl mx-auto px-6 pt-16 pb-32 md:pt-20 md:pb-36">
+      <div class="max-w-3xl">
+        <!-- Status -->
+        <div class="inline-flex items-center gap-2 px-5 py-2 rounded-3xl bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-400 text-sm font-medium mb-6">
+          <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex h-3 w-3 rounded-full bg-emerald-500"></span>
+          </span>
+          Open to new opportunities
+        </div>
 
-      <div class="hero-metrics">
-        {
-          highlights.map((item) => (
-            <div class="hero-metric">
-              <p class="hero-metric__value">{item.value}</p>
-              <p class="hero-metric__label">{item.label}</p>
-            </div>
-          ))
-        }
+        <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter text-slate-950 dark:text-white leading-none">
+          Huy Tran
+        </h1>
+
+        <p class="mt-3 text-3xl md:text-4xl text-[#0A2540] dark:text-[#60A5FA] font-medium">
+          Software Engineer
+        </p>
+
+        <!-- Typing Effect -->
+        <div id="typing" 
+            class="mt-10 h-12 font-mono text-xl md:text-2xl text-slate-600 dark:text-slate-400 min-h-[3rem]">
+        </div>
+
+        <p class="mt-8 max-w-lg text-lg leading-relaxed text-slate-600 dark:text-slate-300">
+          I design and deliver scalable, observable backend systems using .NET and modern cloud architecture — 
+          with clarity, reliability, and zero operational surprises.
+        </p>
+
+        <!-- CTA -->
+        <div class="mt-12 flex flex-wrap gap-4">
+          <a href="/projects" 
+            class="px-8 py-4 bg-[#0A2540] hover:bg-[#1E40AF] text-white rounded-2xl font-semibold text-base transition-all active:scale-95">
+            Explore Projects
+          </a>
+          <a href="/blog" 
+            class="px-8 py-4 border-2 border-slate-300 dark:border-slate-600 hover:border-[#60A5FA] rounded-2xl font-semibold text-base transition-all">
+            Read My Blog
+          </a>
+        </div>
+
+        <!-- Quick Highlights -->
+        <div class="mt-20 grid grid-cols-1 sm:grid-cols-3 gap-8 text-sm">
+          <div>
+            <div class="text-4xl font-semibold text-[#0A2540] dark:text-[#60A5FA]">10+</div>
+            <div class="mt-2 text-slate-500 dark:text-slate-400">Years shipping production systems</div>
+          </div>
+          <div>
+            <div class="text-4xl font-semibold text-[#0A2540] dark:text-[#60A5FA]">Location</div>
+            <div class="mt-2 text-slate-500 dark:text-slate-400">Ho Chi Minh City, Vietnam</div>
+          </div>
+          <div>
+            <div class="text-4xl font-semibold text-[#0A2540] dark:text-[#60A5FA]">.NET + Cloud</div>
+            <div class="mt-2 text-slate-500 dark:text-slate-400">Scalable &amp; Distributed Systems</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="hero-panel">
-      <div class="relative z-10">
-        <span class="chip">Current Focus</span>
-        <p class="mt-5 max-w-md text-[1.9rem] font-semibold leading-tight tracking-tight text-[var(--color-text)] md:text-[2.35rem]">
-          Durable product delivery with explicit architecture, measurable stability, and lower operational drag.
-        </p>
+    <!-- Scroll Prompt -->
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-slate-400 dark:text-slate-500 md:bottom-10">
+      <span class="text-xs tracking-widest">SCROLL TO EXPLORE</span>
+      <div class="w-px h-12 bg-gradient-to-b from-transparent via-slate-400 to-transparent"></div>
+    </div>
+  </section>
 
-        <div class="mt-6 grid gap-4">
-          <div class="surface-subtle">
-            <p class="eyebrow-label">Primary stack</p>
-            <p class="mt-2 text-base font-semibold leading-7 text-[var(--color-text)]">
-              .NET, PostgreSQL, Docker, Astro, and deployment workflows that stay readable.
-            </p>
+  <!-- TECHNOLOGY STACK -->
+  <section class="py-16 bg-slate-50 dark:bg-slate-900 border-t border-slate-100 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-6">
+      <h2 class="text-center text-3xl font-semibold tracking-tight mb-12 text-slate-900 dark:text-white">
+        Technologies I Work With
+      </h2>
+
+      <div class="overflow-hidden py-4">
+        <div class="flex gap-16 animate-marquee whitespace-nowrap text-4xl md:text-5xl font-medium text-slate-400 dark:text-slate-500">
+          <div class="flex items-center gap-16">
+            .NET&nbsp;&nbsp;•&nbsp;&nbsp;C#&nbsp;&nbsp;•&nbsp;&nbsp;ASP.NET&nbsp;&nbsp;•&nbsp;&nbsp;EF Core&nbsp;&nbsp;•&nbsp;&nbsp;Docker&nbsp;&nbsp;•&nbsp;&nbsp;Kubernetes&nbsp;&nbsp;•&nbsp;&nbsp;Azure
           </div>
-
-          <div class="surface-subtle">
-            <p class="eyebrow-label">Delivery lens</p>
-            <p class="mt-2 text-base font-semibold leading-7 text-[var(--color-text)]">
-              Stable releases, maintainable systems, and interfaces that communicate state clearly.
-            </p>
+          <div class="flex items-center gap-16">
+            .NET&nbsp;&nbsp;•&nbsp;&nbsp;C#&nbsp;&nbsp;•&nbsp;&nbsp;ASP.NET&nbsp;&nbsp;•&nbsp;&nbsp;EF Core&nbsp;&nbsp;•&nbsp;&nbsp;Docker&nbsp;&nbsp;•&nbsp;&nbsp;Kubernetes&nbsp;&nbsp;•&nbsp;&nbsp;Azure
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="border-t pt-16" style="border-color: var(--color-border);">
-    <div class="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-      <div>
-        <p class="section-kicker">Featured Work</p>
-        <h2 class="page-title text-3xl md:text-4xl">Selected builds with real delivery constraints</h2>
+  <!-- FEATURED PROJECTS -->
+  <section class="py-20">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div>
+          <span class="uppercase text-sm tracking-[0.125em] text-slate-500 dark:text-slate-400">Selected Work</span>
+          <h2 class="text-4xl md:text-5xl font-semibold tracking-tighter text-slate-900 dark:text-white mt-2">
+            Featured Projects
+          </h2>
+        </div>
+        <a href="/projects" class="mt-6 md:mt-0 text-[#0A2540] dark:text-[#60A5FA] font-medium hover:underline flex items-center gap-2">
+          View all projects →
+        </a>
       </div>
 
-      <a href="/projects" class="action-button action-button--text">Browse all projects</a>
-    </div>
-
-    <div class="mt-8 portfolio-grid">
-      {
-        featuredProjects.map((project) => (
-          <article class="surface-card surface-card--interactive flex h-full flex-col">
-            <span class="chip chip--neutral w-fit">Project</span>
-            <h3 class="mt-5 text-xl font-semibold text-[var(--color-text)] md:text-2xl">{project.title}</h3>
-            <p class="mt-3 text-sm uppercase tracking-[0.16em] text-[var(--color-text-muted)]">{project.meta}</p>
-            <p class="mt-4 text-sm leading-7 text-[var(--color-text-muted)] md:text-base">
-              {project.description}
-            </p>
-            <div class="mt-auto pt-6">
-              <a href="/projects" class="card-link">Explore project details</a>
+      <div class="grid md:grid-cols-3 gap-8">
+        {featuredProjects.map((project) => (
+          <article class="group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden hover:border-[#60A5FA] hover:shadow-xl transition-all duration-300 flex flex-col">
+            <div class="h-64 bg-gradient-to-br from-[#0A2540] via-[#1E40AF] to-[#3B82F6] flex items-center justify-center relative overflow-hidden">
+              <span class="text-white/20 text-8xl font-mono tracking-tighter group-hover:text-white/30 transition">01</span>
+            </div>
+            <div class="p-8 flex flex-col flex-1">
+              <h3 class="font-semibold text-2xl tracking-tight text-slate-900 dark:text-white">{project.title}</h3>
+              <p class="text-xs uppercase tracking-widest text-slate-500 mt-3">{project.meta}</p>
+              <p class="mt-6 text-slate-600 dark:text-slate-300 flex-1">{project.description}</p>
+              <a href={project.slug} 
+                 class="mt-8 text-[#0A2540] dark:text-[#60A5FA] font-medium inline-flex items-center gap-2 group-hover:gap-3 transition-all">
+                View case study 
+                <span class="text-lg">→</span>
+              </a>
             </div>
           </article>
-        ))
-      }
+        ))}
+      </div>
     </div>
   </section>
+
+  <!-- LATEST BLOG POSTS -->
+  <section class="py-20 bg-slate-50 dark:bg-slate-900">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+        <div>
+          <span class="uppercase tracking-widest text-sm text-slate-500">Writing</span>
+          <h2 class="text-4xl font-semibold tracking-tighter mt-2">Latest from the Blog</h2>
+        </div>
+        <a href="/blog" class="text-accent dark:text-accent-light font-medium">View all posts →</a>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        {latestPosts.map((post) => (
+          <article class="group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl p-8 hover:border-accent-light transition-all flex flex-col">
+            <div class="text-xs uppercase tracking-widest text-slate-500 mb-4">
+              {post.publishedDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+            </div>
+            
+            <h3 class="font-semibold text-xl leading-tight group-hover:text-accent dark:group-hover:text-accent-light transition-colors">
+              <a href={`/blog/${post.id}`}>{post.title}</a>
+            </h3>
+
+            <p class="mt-4 text-slate-600 dark:text-slate-400 line-clamp-3 flex-1">
+              {post.description}
+            </p>
+
+            <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700">
+              <a href={`/blog/${post.id}`} 
+                 class="text-sm font-medium text-accent dark:text-accent-light inline-flex items-center gap-2">
+                Read article →
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT SHORT -->
+  <section class="py-24 bg-white dark:bg-[#0F172A] border-t border-slate-100 dark:border-slate-800">
+    <div class="max-w-3xl mx-auto px-6 text-center">
+      <h2 class="text-5xl font-semibold tracking-tighter text-slate-900 dark:text-white">Hi, I'm Huy 👋</h2>
+      <p class="mt-8 text-xl leading-relaxed text-slate-600 dark:text-slate-400">
+        A passionate backend engineer from Ho Chi Minh City specializing in .NET Core, 
+        distributed systems, and cloud-native architecture. 
+        I love turning complex technical challenges into clean, maintainable, and observable solutions.
+      </p>
+    </div>
+  </section>
+
+  <!-- Typing Effect + Three.js -->
+  <script>
+    // Typing Effect
+    const phrases = [
+      "Building scalable distributed systems",
+      "Designing clean & observable architecture",
+      "Shipping reliable .NET applications"
+    ];
+    let i = 0, j = 0, current = "", isDeleting = false;
+    const typingEl = document.getElementById("typing");
+
+    function type() {
+      const phrase = phrases[i];
+      if (isDeleting) current = phrase.substring(0, current.length - 1);
+      else current = phrase.substring(0, current.length + 1);
+
+      typingEl.textContent = current;
+
+      let speed = isDeleting ? 30 : 60;
+      if (!isDeleting && current === phrase) { speed = 1800; isDeleting = true; }
+      else if (isDeleting && current === "") { isDeleting = false; i = (i + 1) % phrases.length; speed = 300; }
+
+      setTimeout(type, speed);
+    }
+    setTimeout(type, 800);
+    
+    // Three.js Background
+    import * as THREE from 'three';
+
+    const canvas = document.getElementById('hero-canvas');
+    if (!canvas) {
+      console.warn('Hero canvas not found');
+    } else {
+      // Scene setup
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      const renderer = new THREE.WebGLRenderer({ 
+        canvas: canvas, 
+        alpha: true, 
+        antialias: true 
+      });
+
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      camera.position.z = 30;
+
+      // Particles
+      const particleCount = 800;
+      const positions = new Float32Array(particleCount * 3);
+      const colors = new Float32Array(particleCount * 3);
+
+      const color1 = new THREE.Color('#0A2540');   // dark blue
+      const color2 = new THREE.Color('#60A5FA');   // light blue
+
+      for (let i = 0; i < particleCount * 3; i += 3) {
+        // Random positions in a box
+        positions[i]     = (Math.random() - 0.5) * 80;
+        positions[i + 1] = (Math.random() - 0.5) * 80;
+        positions[i + 2] = (Math.random() - 0.5) * 40 - 10;
+
+        // Color gradient
+        const mix = Math.random();
+        const color = color1.clone().lerp(color2, mix);
+        colors[i]     = color.r;
+        colors[i + 1] = color.g;
+        colors[i + 2] = color.b;
+      }
+
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+      const material = new THREE.PointsMaterial({
+        size: 0.35,
+        vertexColors: true,
+        transparent: true,
+        opacity: 0.75,
+        blending: THREE.AdditiveBlending,
+      });
+
+      const particles = new THREE.Points(geometry, material);
+      scene.add(particles);
+
+      // Gentle rotation + mouse interaction
+      let mouseX = 0;
+      let mouseY = 0;
+
+      const handleMouseMove = (e: MouseEvent) => {
+        mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+        mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+      };
+      window.addEventListener('mousemove', handleMouseMove);
+
+      // Resize handler
+      function handleResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+      window.addEventListener('resize', handleResize);
+
+      // Animation loop
+      let animationFrameId = 0;
+
+      function animate() {
+        animationFrameId = requestAnimationFrame(animate);
+
+        particles.rotation.y += 0.0002;
+        particles.rotation.x = mouseY * 0.15;
+        particles.rotation.y += mouseX * 0.08;
+
+        // Very subtle bob
+        particles.position.y = Math.sin(Date.now() * 0.0005) * 0.5;
+
+        renderer.render(scene, camera);
+      }
+
+      animate();
+
+      function cleanup() {
+        cancelAnimationFrame(animationFrameId);
+        window.removeEventListener('mousemove', handleMouseMove);
+        window.removeEventListener('resize', handleResize);
+        geometry.dispose();
+        material.dispose();
+        renderer.dispose();
+      }
+
+      window.addEventListener('pagehide', cleanup, { once: true });
+    }
+  </script>
 </BaseLayout>

@@ -52,7 +52,7 @@ const jsonLd =
     };
 ---
 
-<html lang="en" data-theme="light">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -77,24 +77,31 @@ const jsonLd =
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
 
+    <!-- Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" />
+
     <!-- Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
     <script is:inline>
       (() => {
-        const storageKey = "theme-preference";
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        const storedTheme = window.localStorage.getItem(storageKey);
-        const theme = storedTheme === "light" || storedTheme === "dark"
-          ? storedTheme
-          : prefersDark
-            ? "dark"
-            : "light";
-
-        document.documentElement.dataset.theme = theme;
-        document.documentElement.style.colorScheme = theme;
+        const root = document.documentElement;
+        const storedTheme = window.localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = storedTheme ? storedTheme === 'dark' : prefersDark;
+        root.classList.toggle('dark', isDark);
+        root.style.colorScheme = isDark ? 'dark' : 'light';
       })();
     </script>
+
+    <style>
+      :root {
+        --accent-color: #0A2540;
+      }
+      .dark {
+        --accent-color: #60A5FA;
+      }
+    </style>
     
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-LCYQ4SKTG1"></script>
@@ -107,24 +114,23 @@ const jsonLd =
     </script>
   </head>
 
-  <body>
-    <div class="site-shell">
-      <div class="site-shell__glow site-shell__glow--left"></div>
-      <div class="site-shell__glow site-shell__glow--right"></div>
+  <body class="bg-white dark:bg-[#0F172A] text-slate-900 dark:text-slate-100 transition-colors duration-300 font-sans">
+    <!-- Navigation -->
+    <Header />
 
-      <Header />
+    <!-- Main Content -->
+    <main class="pt-20">
+      <slot />
+    </main>
 
-      <main class="mx-auto w-full max-w-[96rem] px-6 py-10 sm:px-8 md:py-14 lg:px-12">
-        <div class="site-panel">
-          <slot />
-        </div>
-      </main>
-
-      <footer class="mx-auto w-full max-w-[96rem] px-6 pb-10 pt-2 text-center sm:px-8 lg:px-12">
-        <div class="footer-panel">
-          <p class="footer-copy">&copy; {new Date().getFullYear()} Huy Tran. All rights reserved.</p>
-        </div>
-      </footer>
-    </div>
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-slate-400 py-12 mt-24">
+      <div class="max-w-7xl mx-auto px-6 text-center text-sm">
+        <p>© {new Date().getFullYear()} Huy Tran • Software Engineer</p>
+        <p class="mt-2 text-xs text-slate-500">
+          Built with Astro + Tailwind CSS + Three.js
+        </p>
+      </div>
+    </footer>
   </body>
 </html>

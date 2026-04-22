@@ -1,102 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 @plugin "@tailwindcss/typography";
 
-:root {
-  --md-sys-color-background: #fdf7ff;
-  --md-sys-color-surface: #fdf7ff;
-  --md-sys-color-surface-dim: #ddd8df;
-  --md-sys-color-surface-bright: #fdf7ff;
-  --md-sys-color-surface-container-lowest: #ffffff;
-  --md-sys-color-surface-container-low: #f7f2f9;
-  --md-sys-color-surface-container: #f1ecf4;
-  --md-sys-color-surface-container-high: #ebe6ee;
-  --md-sys-color-surface-container-highest: #e6e0e9;
-  --md-sys-color-outline: #7a757f;
-  --md-sys-color-outline-variant: #cac4cf;
-  --md-sys-color-on-background: #1d1a20;
-  --md-sys-color-on-surface: #1d1a20;
-  --md-sys-color-on-surface-variant: #49454e;
-  --md-sys-color-primary: #6750a4;
-  --md-sys-color-on-primary: #ffffff;
-  --md-sys-color-primary-container: #e9ddff;
-  --md-sys-color-on-primary-container: #22005d;
-  --md-sys-color-secondary: #625b71;
-  --md-sys-color-on-secondary: #ffffff;
-  --md-sys-color-secondary-container: #e8def8;
-  --md-sys-color-on-secondary-container: #1e192b;
-  --md-sys-color-tertiary: #006874;
-  --md-sys-color-on-tertiary: #ffffff;
-  --md-sys-color-tertiary-container: #97f0ff;
-  --md-sys-color-on-tertiary-container: #001f24;
-  --md-sys-color-inverse-surface: #322f35;
-  --md-sys-color-inverse-on-surface: #f5eff7;
-  --hero-glow-primary: rgba(103, 80, 164, 0.18);
-  --hero-glow-tertiary: rgba(0, 104, 116, 0.14);
-  --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
-  --elevation-2: 0 4px 10px rgba(32, 26, 43, 0.1), 0 2px 6px rgba(32, 26, 43, 0.08);
-  --elevation-3: 0 10px 24px rgba(32, 26, 43, 0.12), 0 4px 10px rgba(32, 26, 43, 0.08);
-  --state-hover: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
-  --state-focus: color-mix(in srgb, var(--md-sys-color-primary) 14%, transparent);
-}
-
-html[data-theme="dark"] {
-  --md-sys-color-background: #141218;
-  --md-sys-color-surface: #141218;
-  --md-sys-color-surface-dim: #141218;
-  --md-sys-color-surface-bright: #3b383e;
-  --md-sys-color-surface-container-lowest: #0f0d13;
-  --md-sys-color-surface-container-low: #1d1b20;
-  --md-sys-color-surface-container: #211f26;
-  --md-sys-color-surface-container-high: #2b2930;
-  --md-sys-color-surface-container-highest: #36343b;
-  --md-sys-color-outline: #948f99;
-  --md-sys-color-outline-variant: #49454e;
-  --md-sys-color-on-background: #e6e0e9;
-  --md-sys-color-on-surface: #e6e0e9;
-  --md-sys-color-on-surface-variant: #cac4cf;
-  --md-sys-color-primary: #cfbcff;
-  --md-sys-color-on-primary: #381e72;
-  --md-sys-color-primary-container: #4f378a;
-  --md-sys-color-on-primary-container: #e9ddff;
-  --md-sys-color-secondary: #cbc2db;
-  --md-sys-color-on-secondary: #332d41;
-  --md-sys-color-secondary-container: #4a4458;
-  --md-sys-color-on-secondary-container: #e8def8;
-  --md-sys-color-tertiary: #7dd8e8;
-  --md-sys-color-on-tertiary: #00363d;
-  --md-sys-color-tertiary-container: #004f58;
-  --md-sys-color-on-tertiary-container: #97f0ff;
-  --md-sys-color-inverse-surface: #e6e0e9;
-  --md-sys-color-inverse-on-surface: #322f35;
-  --hero-glow-primary: rgba(207, 188, 255, 0.16);
-  --hero-glow-tertiary: rgba(125, 216, 232, 0.12);
-  --elevation-1: 0 1px 2px rgba(0, 0, 0, 0.38);
-  --elevation-2: 0 6px 14px rgba(0, 0, 0, 0.34), 0 2px 6px rgba(0, 0, 0, 0.24);
-  --elevation-3: 0 14px 30px rgba(0, 0, 0, 0.38), 0 6px 14px rgba(0, 0, 0, 0.22);
-  --state-hover: color-mix(in srgb, var(--md-sys-color-on-surface) 10%, transparent);
-  --state-focus: color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent);
-  --logo-primary: #E5E7EB;
-}
+/* ====================== BASE ====================== */
 
 :root {
-  --color-bg: var(--md-sys-color-background);
-  --color-bg-secondary: var(--md-sys-color-surface-container-low);
-  --color-surface: var(--md-sys-color-surface-container-low);
-  --color-surface-strong: var(--md-sys-color-surface-container);
-  --color-surface-raised: var(--md-sys-color-surface-container-high);
-  --color-border: var(--md-sys-color-outline-variant);
-  --color-outline: var(--md-sys-color-outline);
-  --color-text: var(--md-sys-color-on-surface);
-  --color-text-muted: var(--md-sys-color-on-surface-variant);
-  --color-primary: var(--md-sys-color-primary);
-  --color-primary-strong: var(--md-sys-color-primary);
-  --color-primary-container: var(--md-sys-color-primary-container);
-  --color-accent: var(--md-sys-color-tertiary);
-  --color-accent-soft: color-mix(in srgb, var(--md-sys-color-tertiary-container) 60%, transparent);
-  --shadow-soft: var(--elevation-2);
-  --shadow-raised: var(--elevation-1);
-  --logo-primary: #0F172A;
-  --logo-accent: #38BDF8;
+  --accent: #0A2540;
+  --accent-light: #60A5FA;
+}
+
+.dark {
+  --accent: #60A5FA;
 }
 
 html {
@@ -104,376 +19,128 @@ html {
 }
 
 body {
-  @apply min-h-screen antialiased;
-  background:
-    radial-gradient(circle at top left, var(--hero-glow-primary), transparent 24rem),
-    radial-gradient(circle at top right, var(--hero-glow-tertiary), transparent 20rem),
-    linear-gradient(180deg, var(--md-sys-color-background) 0%, var(--md-sys-color-surface) 100%);
-  color: var(--md-sys-color-on-background);
-  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-a {
-  @apply transition;
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
 }
 
-img {
-  @apply rounded-[1.5rem];
-}
+/* ====================== TYPOGRAPHY ====================== */
 
-.site-shell {
-  @apply relative min-h-screen overflow-x-hidden;
-}
-
-.site-shell__glow {
-  @apply pointer-events-none absolute h-80 w-80 rounded-full blur-3xl;
-}
-
-.site-shell__glow--left {
-  @apply -left-24 top-28;
-  background: color-mix(in srgb, var(--md-sys-color-primary) 24%, transparent);
-}
-
-.site-shell__glow--right {
-  @apply -right-16 top-16;
-  background: color-mix(in srgb, var(--md-sys-color-tertiary) 20%, transparent);
-}
-
-.site-panel {
-  @apply rounded-[1.5rem] border px-8 py-10 sm:px-10 sm:py-12 md:px-14 md:py-14 lg:px-16;
-  background: color-mix(in srgb, var(--md-sys-color-surface-container-low) 92%, transparent);
-  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 72%, transparent);
-  box-shadow: var(--elevation-1);
-}
-
-.header-shell {
-  @apply flex items-center justify-between gap-6 rounded-[1.25rem] border px-5 py-4 md:px-6;
-  background: color-mix(in srgb, var(--md-sys-color-surface-container) 92%, transparent);
-  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 72%, transparent);
-  box-shadow: var(--elevation-1);
-}
-
-.header-brand {
-  @apply inline-flex items-center gap-3;
-}
-
-.header-brand__mark {
-  @apply inline-flex h-11 w-11 items-center justify-center rounded-2xl text-sm font-bold tracking-[0.18em];
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
-}
-
-.nav-pill {
-  @apply rounded-full px-4 py-2 text-sm font-medium transition;
-}
-
-.nav-pill--active {
-  background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
-}
-
-.nav-pill--idle {
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.nav-pill--idle:hover {
-  background: color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent);
-  color: var(--md-sys-color-on-surface);
-}
-
-.theme-toggle {
-  @apply inline-flex cursor-pointer items-center gap-2 rounded-full border px-3.5 py-2 text-sm font-medium transition;
-  background: var(--md-sys-color-surface-container-high);
-  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 72%, transparent);
-  color: var(--md-sys-color-on-surface);
-}
-
-.theme-toggle:hover {
-  background: color-mix(in srgb, var(--md-sys-color-surface-container-high) 88%, var(--state-hover));
-}
-
-.theme-toggle:focus-visible,
-.nav-pill:focus-visible,
-.action-button:focus-visible,
-.card-link:focus-visible {
-  outline: 3px solid var(--state-focus);
-  outline-offset: 2px;
-}
-
-.theme-toggle__icon--moon,
-html[data-theme="dark"] .theme-toggle__icon--sun {
-  display: none;
-}
-
-html[data-theme="dark"] .theme-toggle__icon--moon {
-  display: inline-flex;
-}
-
-.header-mobile-nav {
-  @apply flex flex-wrap gap-3 rounded-[1.25rem] border px-4 py-4;
-  background: color-mix(in srgb, var(--md-sys-color-surface-container) 94%, transparent);
-  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 72%, transparent);
-  box-shadow: var(--elevation-1);
-}
-
-.footer-panel {
-  @apply rounded-[1.25rem] border px-6 py-5;
-  background: color-mix(in srgb, var(--md-sys-color-surface-container) 94%, transparent);
-  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 72%, transparent);
-  box-shadow: var(--elevation-1);
-}
-
-.footer-copy {
-  @apply text-sm font-medium tracking-[0.08em];
-  color: var(--md-sys-color-on-surface-variant);
+.page-title {
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
 }
 
 .section-kicker {
-  @apply text-sm font-semibold uppercase tracking-[0.22em];
-  color: var(--md-sys-color-tertiary);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.125em;
+  text-transform: uppercase;
+  color: #64748b;
 }
 
-.page-title {
-  @apply mt-4 font-bold tracking-tight;
-  color: var(--md-sys-color-on-surface);
+.dark .section-kicker {
+  color: #94a3b8;
 }
 
-.page-copy {
-  @apply mt-6 text-lg leading-8;
-  color: var(--md-sys-color-on-surface-variant);
+/* ====================== HERO ====================== */
+
+#hero-canvas {
+  mix-blend-mode: screen;
+  opacity: 0.15;
+  filter: contrast(1.1) brightness(1.05);
 }
+
+/* ====================== MARQUEE ANIMATION ====================== */
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Duplicate content for seamless infinite scroll */
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ====================== CARDS & BUTTONS ====================== */
 
 .surface-card {
-  @apply rounded-[1.25rem] border p-7;
-  background: var(--md-sys-color-surface-container);
-  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 76%, transparent);
-  box-shadow: var(--elevation-1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.surface-card--interactive {
-  @apply transition;
+.surface-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 
+              0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
-.surface-card--interactive:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--elevation-2);
+.dark .surface-card:hover {
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3);
 }
 
-.surface-subtle {
-  @apply rounded-[1.1rem] border p-6;
-  background: var(--md-sys-color-surface-container-high);
-  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 70%, transparent);
-}
-
-.eyebrow-label {
-  @apply text-xs font-semibold uppercase tracking-[0.18em];
-  color: var(--md-sys-color-on-surface-variant);
-}
-
+/* Modern Button */
 .action-button {
-  @apply inline-flex cursor-pointer items-center justify-center rounded-full px-5 py-3 text-sm font-semibold transition;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 9999px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  text-decoration: none;
 }
 
 .action-button--filled {
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
-  box-shadow: var(--elevation-1);
+  background-color: var(--accent);
+  color: white;
 }
 
 .action-button--filled:hover {
-  background: color-mix(in srgb, var(--md-sys-color-primary) 90%, white);
-  box-shadow: var(--elevation-2);
+  background-color: #1e40af;
+  transform: translateY(-1px);
 }
 
 .action-button--tonal {
-  background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  background-color: #f1f5f9;
+  color: #0f172a;
+  border: 1px solid #e2e8f0;
 }
 
-.action-button--tonal:hover {
-  background: color-mix(in srgb, var(--md-sys-color-secondary-container) 84%, var(--state-hover));
+.dark .action-button--tonal {
+  background-color: #1e2937;
+  color: white;
+  border-color: #334155;
 }
 
-.action-button--text {
-  color: var(--md-sys-color-on-surface);
-  border: 1px solid var(--md-sys-color-outline);
-  background: transparent;
+/* ====================== UTILITIES ====================== */
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.action-button--text:hover {
-  background: color-mix(in srgb, var(--md-sys-color-on-surface) 7%, transparent);
+/* ====================== DARK MODE IMPROVEMENTS ====================== */
+
+.dark {
+  color-scheme: dark;
 }
 
-.chip {
-  @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em];
-  color: var(--md-sys-color-on-primary-container);
-  background: var(--md-sys-color-primary-container);
+/* Subtle glow for tech feel */
+.glow-blue {
+  filter: drop-shadow(0 0 15px rgba(96, 165, 250, 0.3));
 }
-
-.chip--neutral {
-  color: var(--md-sys-color-on-surface-variant);
-  background: var(--md-sys-color-surface-container-highest);
-}
-
-.hero-panel {
-  @apply relative overflow-hidden rounded-[1.5rem] border p-8 md:p-10;
-  background:
-    radial-gradient(circle at top right, color-mix(in srgb, var(--md-sys-color-primary-container) 88%, transparent), transparent 42%),
-    linear-gradient(180deg, var(--md-sys-color-surface-container-high), var(--md-sys-color-surface-container));
-  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 76%, transparent);
-  box-shadow: var(--elevation-2);
-}
-
-.hero-metrics {
-  @apply mt-6 grid gap-4 sm:grid-cols-3;
-}
-
-.hero-metric {
-  @apply rounded-[1.1rem] border p-5;
-  background: color-mix(in srgb, var(--md-sys-color-surface-container-highest) 88%, transparent);
-  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 66%, transparent);
-}
-
-.hero-metric__value {
-  @apply text-lg font-semibold tracking-tight;
-  color: var(--md-sys-color-on-surface);
-}
-
-.hero-metric__label {
-  @apply mt-1 text-sm leading-6;
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.portfolio-grid {
-  @apply grid gap-8 md:grid-cols-2 xl:grid-cols-3;
-}
-
-.portfolio-grid__featured {
-  @apply md:col-span-2;
-}
-
-.card-link {
-  @apply inline-flex items-center gap-2 text-sm font-semibold;
-  color: var(--md-sys-color-primary);
-}
-
-.card-link:hover {
-  color: var(--md-sys-color-on-surface);
-}
-
-.portrait-shell {
-  @apply relative overflow-hidden rounded-[1.5rem] border p-4;
-  background: var(--md-sys-color-surface-container);
-  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 76%, transparent);
-  box-shadow: var(--elevation-1);
-}
-
-.portrait-image {
-  @apply h-[25rem] w-full rounded-[1.5rem] object-cover md:h-[34rem];
-}
-
-.portrait-placeholder {
-  @apply flex h-[25rem] w-full items-end rounded-[1.5rem] p-6 text-white md:h-[34rem];
-  background:
-    linear-gradient(180deg, rgba(15, 23, 42, 0.08), rgba(15, 23, 42, 0.72)),
-    radial-gradient(circle at top, color-mix(in srgb, var(--md-sys-color-tertiary) 82%, transparent), transparent 35%),
-    linear-gradient(135deg, #18130f, #2f2a4f 55%, #0d5b67);
-}
-
-.article-shell {
-  @apply mx-auto max-w-4xl;
-}
-
-.article-link {
-  @apply inline-flex items-center text-sm font-medium;
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.article-link:hover {
-  color: var(--md-sys-color-on-surface);
-}
-
-.article-header {
-  @apply mt-6 border-b pb-8;
-  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 76%, transparent);
-}
-
-.article-prose {
-  @apply prose mt-10 max-w-none;
-  --tw-prose-body: var(--md-sys-color-on-surface-variant);
-  --tw-prose-headings: var(--md-sys-color-on-surface);
-  --tw-prose-links: var(--md-sys-color-on-surface);
-  --tw-prose-bold: var(--md-sys-color-on-surface);
-  --tw-prose-counters: var(--md-sys-color-on-surface-variant);
-  --tw-prose-bullets: color-mix(in srgb, var(--md-sys-color-primary) 72%, var(--md-sys-color-on-surface-variant));
-  --tw-prose-hr: var(--md-sys-color-outline-variant);
-  --tw-prose-quotes: var(--md-sys-color-on-surface);
-  --tw-prose-quote-borders: color-mix(in srgb, var(--md-sys-color-primary) 42%, var(--md-sys-color-outline-variant));
-  --tw-prose-captions: var(--md-sys-color-on-surface-variant);
-  --tw-prose-code: var(--md-sys-color-on-surface);
-  --tw-prose-pre-bg: #111111;
-  --tw-prose-pre-code: #f5f5f5;
-  --tw-prose-th-borders: var(--md-sys-color-outline-variant);
-  --tw-prose-td-borders: var(--md-sys-color-outline-variant);
-}
-
-.article-prose :where(h2, h3, h4) {
-  letter-spacing: -0.02em;
-}
-
-.article-prose :where(h2) {
-  @apply mt-12 text-2xl;
-}
-
-.article-prose :where(h3) {
-  @apply mt-8 text-xl;
-}
-
-.article-prose :where(p, li) {
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-.article-prose :where(a) {
-  @apply font-medium no-underline;
-}
-
-.article-prose :where(a:hover) {
-  text-decoration: underline;
-}
-
-.article-prose :where(code):not(:where(pre code)) {
-  @apply rounded px-1.5 py-0.5 text-[0.95em];
-  background: color-mix(in srgb, var(--md-sys-color-primary-container) 72%, transparent);
-}
-
-.article-prose :where(pre) {
-  @apply rounded-[1.5rem] border p-5;
-  border-color: color-mix(in srgb, var(--md-sys-color-outline-variant) 76%, transparent);
-}
-
-.article-prose :where(blockquote) {
-  color: var(--md-sys-color-on-surface-variant);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-
-  .surface-card--interactive:hover,
-  .action-button--filled:hover {
-    transform: none;
-    box-shadow: var(--elevation-1);
-  }
-}
-
-
