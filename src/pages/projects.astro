@@ -1,55 +1,131 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import ProjectCard from "../components/ProjectCard.astro";
+import { projects } from "@/data/projects";
 
-const projects = [
-  {
-    title: "Fullstack Task Manager",
-    description:
-      "A fullstack productivity application with ASP.NET Core Web API, PostgreSQL, authentication, and a modern frontend dashboard.",
-    stack: ["ASP.NET Core", "PostgreSQL", "React", "Docker"],
-    liveUrl: "#",
-    sourceUrl: "#"
-  },
-  {
-    title: "URL Shortener API",
-    description:
-      "A backend-focused service for generating short links, tracking usage metrics, and exposing clean REST endpoints for integration.",
-    stack: ["ASP.NET Core", "REST API", "PostgreSQL", "Docker"],
-    liveUrl: "#",
-    sourceUrl: "#"
-  },
-  {
-    title: "Personal Portfolio Platform",
-    description:
-      "A self-hosted personal website and blog deployed on VPS with Dokploy, used to document engineering notes and showcase selected projects.",
-    stack: ["Astro", "Tailwind CSS", "Dokploy", "VPS"],
-    liveUrl: "#",
-    sourceUrl: "#"
-  }
-];
+const featuredProject = projects.find((project) => project.featured) ?? projects[0];
+const remainingProjects = featuredProject
+  ? projects.filter((project) => project.slug !== featuredProject.slug)
+  : projects;
+const categories = Array.from(new Set(projects.map((project) => project.category)));
+const stackHighlights = Array.from(new Set(projects.flatMap((project) => project.stack))).slice(0, 8);
 ---
 
-<BaseLayout title="Projects">
-  <section>
-    <p class="section-kicker">Portfolio</p>
-    <h1 class="page-title text-4xl md:text-5xl">Selected Projects</h1>
-    <p class="page-copy max-w-3xl">
-      These builds reflect the way I work: backend-first engineering, measurable delivery decisions,
-      and interfaces that stay clear under real operational constraints.
-    </p>
+<BaseLayout
+  title="Projects"
+  description="Selected software engineering projects by Huy Tran, focused on backend systems, deployment workflows, fullstack delivery, and production-minded architecture."
+>
+  <section class="projects-hero">
+    <div class="max-w-4xl">
+      <p class="section-kicker">Portfolio</p>
+      <h1 class="page-title mt-3 text-5xl text-slate-950 dark:text-white md:text-6xl xl:text-7xl">
+        Selected builds with the tradeoffs left visible.
+      </h1>
+      <p class="page-copy max-w-3xl">
+        These projects reflect how I approach software: backend-first systems, clean delivery paths,
+        observable behavior, and interfaces that stay clear under real operational constraints.
+      </p>
+    </div>
+
+    <div class="projects-summary-grid">
+      <div>
+        <p class="eyebrow-label">Projects</p>
+        <p class="mt-2 text-4xl font-semibold tracking-tight text-[#0A2540] dark:text-[#60A5FA]">
+          {projects.length}
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow-label">Main stack</p>
+        <p class="mt-2 text-4xl font-semibold tracking-tight text-[#0A2540] dark:text-[#60A5FA]">
+          .NET
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow-label">Delivery focus</p>
+        <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">
+          APIs, deployment, observability, and production-style architecture.
+        </p>
+      </div>
+    </div>
   </section>
 
-  <section class="mt-8 flex flex-wrap gap-3">
-    <span class="chip chip--neutral">APIs</span>
-    <span class="chip chip--neutral">Deployment</span>
-    <span class="chip chip--neutral">Fullstack delivery</span>
-    <span class="chip chip--neutral">Astro and .NET</span>
-  </section>
-
-  <section class="mt-12 portfolio-grid">
-    {projects.map((project) => (
-      <ProjectCard {...project} />
+  <section class="projects-section mt-12 flex flex-wrap gap-3">
+    {categories.map((category) => (
+      <span class="chip chip--neutral">{category}</span>
     ))}
+    {stackHighlights.map((item) => (
+      <span class="chip">#{item}</span>
+    ))}
+  </section>
+
+  {
+    featuredProject && (
+      <section class="projects-section mt-16">
+        <div class="mb-6">
+          <p class="section-kicker">Featured case study</p>
+          <h2 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">
+            Start with the complete product build
+          </h2>
+        </div>
+
+        <article class="project-feature-card">
+          <a href={`/projects/${featuredProject.slug}`} class="project-feature-visual" aria-label={`View ${featuredProject.title} case study`}>
+            <span class="font-mono text-8xl font-semibold tracking-tighter text-white/20">01</span>
+          </a>
+
+          <div class="project-feature-body">
+            <div class="flex flex-wrap items-center gap-2">
+              <span class="chip">{featuredProject.category}</span>
+              <span class="chip chip--neutral">Featured</span>
+            </div>
+
+            <h3 class="mt-5 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">
+              <a href={`/projects/${featuredProject.slug}`} class="hover:text-[#0A2540] dark:hover:text-[#60A5FA]">
+                {featuredProject.title}
+              </a>
+            </h3>
+
+            <p class="mt-5 text-base leading-8 text-slate-600 dark:text-slate-300 md:text-lg">
+              {featuredProject.summary}
+            </p>
+
+            <div class="mt-6 grid gap-3 sm:grid-cols-2">
+              {featuredProject.focus.map((item) => (
+                <div class="project-focus-item">
+                  <span aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5">
+                      <path d="m5 12 4 4L19 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                    </svg>
+                  </span>
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+
+            <div class="mt-8">
+              <a href={`/projects/${featuredProject.slug}`} class="action-button action-button--filled">
+                View case study
+                <span aria-hidden="true">-></span>
+              </a>
+            </div>
+          </div>
+        </article>
+      </section>
+    )
+  }
+
+  <section class="projects-section mt-20">
+    <div class="mb-8">
+      <p class="section-kicker">Case studies</p>
+      <h2 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">
+        More selected work
+      </h2>
+    </div>
+
+    <div class="project-grid">
+      {remainingProjects.map((project, index) => (
+        <ProjectCard project={project} index={index + 1} />
+      ))}
+    </div>
   </section>
 </BaseLayout>

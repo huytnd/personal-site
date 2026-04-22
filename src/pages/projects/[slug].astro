@@ -1,0 +1,186 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getProjectBySlug, hasRealUrl, projects } from "@/data/projects";
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { slug } = Astro.params;
+const project = Astro.props.project ?? getProjectBySlug(slug);
+
+if (!project) {
+  return Astro.redirect("/404");
+}
+
+const relatedProjects = projects.filter((item) => item.slug !== project.slug).slice(0, 2);
+
+const sections = [
+  {
+    eyebrow: "Problem",
+    title: "The engineering problem",
+    body: project.caseStudy.problem,
+  },
+  {
+    eyebrow: "Approach",
+    title: "Technical approach",
+    items: project.caseStudy.approach,
+  },
+  {
+    eyebrow: "Architecture",
+    title: "System shape",
+    items: project.caseStudy.architecture,
+  },
+  {
+    eyebrow: "Delivery",
+    title: "Delivery notes",
+    items: project.caseStudy.delivery,
+  },
+  {
+    eyebrow: "Outcome",
+    title: "What this demonstrates",
+    items: project.caseStudy.outcome,
+  },
+  {
+    eyebrow: "Next",
+    title: "Next steps",
+    items: project.caseStudy.nextSteps,
+  },
+];
+---
+
+<BaseLayout title={project.title} description={project.description}>
+  <article class="case-study-shell">
+    <a href="/projects" class="article-link">
+      <span aria-hidden="true">&lt;-</span>
+      Back to projects
+    </a>
+
+    <header class="case-study-hero">
+      <div class="case-study-hero-copy">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="chip">{project.category}</span>
+          {project.featured && <span class="chip chip--neutral">Featured</span>}
+        </div>
+
+        <h1 class="page-title mt-6 text-5xl text-slate-950 dark:text-white md:text-6xl xl:text-7xl">
+          {project.title}
+        </h1>
+
+        <p class="page-copy max-w-4xl">
+          {project.description}
+        </p>
+
+        <div class="mt-8 flex flex-wrap gap-3">
+          {hasRealUrl(project.liveUrl) && (
+            <a href={project.liveUrl} target="_blank" rel="noreferrer" class="action-button action-button--filled">
+              Live demo
+              <span aria-hidden="true">-></span>
+            </a>
+          )}
+          {hasRealUrl(project.sourceUrl) && (
+            <a href={project.sourceUrl} target="_blank" rel="noreferrer" class="action-button action-button--tonal">
+              Source code
+              <span aria-hidden="true">-></span>
+            </a>
+          )}
+          <a href="mailto:hello@huytnd.io.vn" class="action-button action-button--tonal">
+            Discuss a project
+            <span aria-hidden="true">-></span>
+          </a>
+        </div>
+      </div>
+
+      <aside class="case-study-panel">
+        <p class="eyebrow-label text-white/70">Stack</p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          {project.stack.map((item) => (
+            <span class="case-study-stack-chip">{item}</span>
+          ))}
+        </div>
+
+        <div class="mt-8 border-t border-white/15 pt-6">
+          <p class="eyebrow-label text-white/70">Focus areas</p>
+          <ul class="mt-4 space-y-3">
+            {project.focus.map((item) => (
+              <li class="flex items-start gap-3 text-sm leading-6 text-white/85">
+                <span class="mt-1 text-[#93C5FD]" aria-hidden="true">/</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    </header>
+
+    <section class="case-study-overview">
+      <div>
+        <p class="section-kicker">Overview</p>
+        <h2 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white md:text-4xl">
+          Built to show the decisions behind the interface.
+        </h2>
+      </div>
+      <p class="text-lg leading-8 text-[var(--color-text-muted)]">
+        {project.caseStudy.overview}
+      </p>
+    </section>
+
+    <section class="case-study-section-grid">
+      {
+        sections.map((section) => (
+          <section class="case-study-section-card">
+            <p class="eyebrow-label">{section.eyebrow}</p>
+            <h2 class="mt-3 text-2xl font-semibold tracking-tight text-[var(--color-text)]">
+              {section.title}
+            </h2>
+
+            {section.body ? (
+              <p class="mt-4 leading-8 text-[var(--color-text-muted)]">
+                {section.body}
+              </p>
+            ) : (
+              <ul class="mt-5 space-y-3">
+                {section.items?.map((item) => (
+                  <li class="case-study-list-item">
+                    <span aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="none" class="h-5 w-5">
+                        <path d="m5 12 4 4L19 6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+                      </svg>
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))
+      }
+    </section>
+
+    <footer class="case-study-footer">
+      <div>
+        <p class="section-kicker">More work</p>
+        <h2 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">
+          Keep exploring the portfolio
+        </h2>
+      </div>
+
+      <div class="case-study-related-grid">
+        {relatedProjects.map((item) => (
+          <a href={`/projects/${item.slug}`} class="case-study-related-card">
+            <span class="chip chip--neutral">{item.category}</span>
+            <span class="mt-4 block text-xl font-semibold tracking-tight text-[var(--color-text)]">
+              {item.title}
+            </span>
+            <span class="mt-3 block text-sm leading-6 text-[var(--color-text-muted)]">
+              {item.summary}
+            </span>
+          </a>
+        ))}
+      </div>
+    </footer>
+  </article>
+</BaseLayout>

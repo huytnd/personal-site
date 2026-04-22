@@ -1,26 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { projects } from "@/data/projects";
 
-const featuredProjects = [
-  {
-    title: "Fullstack Task Manager",
-    description: "Production-style fullstack application with clean architecture, authentication, real-time updates, and complete CI/CD pipeline.",
-    meta: ".NET • PostgreSQL • Docker • Tailwind",
-    slug: "/projects/task-manager",
-  },
-  {
-    title: "URL Shortener API",
-    description: "High-performance backend service featuring analytics, rate limiting, caching, and fully containerized deployment.",
-    meta: "ASP.NET Core • Redis • Docker • Metrics",
-    slug: "/projects/url-shortener",
-  },
-  {
-    title: "Personal Portfolio Platform",
-    description: "This website — built with Astro, MDX, Tailwind, and deployed using modern DevOps practices on VPS.",
-    meta: "Astro • Tailwind • Three.js • Dokploy",
-    slug: "/projects/portfolio",
-  },
-];
+const featuredProjects = projects;
 
 const blogModules = import.meta.glob("../content/blog/**/*.{md,mdx}", {
   eager: true,
@@ -152,16 +134,20 @@ const latestPosts = Object.entries(blogModules)
       </div>
 
       <div class="grid md:grid-cols-3 gap-8">
-        {featuredProjects.map((project) => (
+        {featuredProjects.map((project, index) => (
           <article class="group bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-3xl overflow-hidden hover:border-[#60A5FA] hover:shadow-xl transition-all duration-300 flex flex-col">
             <div class="h-64 bg-gradient-to-br from-[#0A2540] via-[#1E40AF] to-[#3B82F6] flex items-center justify-center relative overflow-hidden">
-              <span class="text-white/20 text-8xl font-mono tracking-tighter group-hover:text-white/30 transition">01</span>
+              <span class="text-white/20 text-8xl font-mono tracking-tighter group-hover:text-white/30 transition">
+                {String(index + 1).padStart(2, "0")}
+              </span>
             </div>
             <div class="p-8 flex flex-col flex-1">
               <h3 class="font-semibold text-2xl tracking-tight text-slate-900 dark:text-white">{project.title}</h3>
-              <p class="text-xs uppercase tracking-widest text-slate-500 mt-3">{project.meta}</p>
+              <p class="text-xs uppercase tracking-widest text-slate-500 mt-3">
+                {project.stack.slice(0, 4).join(" • ")}
+              </p>
               <p class="mt-6 text-slate-600 dark:text-slate-300 flex-1">{project.description}</p>
-              <a href={project.slug} 
+              <a href={`/projects/${project.slug}`}
                  class="mt-8 text-[#0A2540] dark:text-[#60A5FA] font-medium inline-flex items-center gap-2 group-hover:gap-3 transition-all">
                 View case study 
                 <span class="text-lg">→</span>
