@@ -1,0 +1,21 @@
+---
+import { technologies } from "@/data/technologies";
+---
+
+<div class="technology-strip" role="list" aria-label="Technologies Huy works with">
+  <div class="technology-marquee-track">
+    {
+      [...technologies, ...technologies].map((technology) => (
+        <div class="technology-item" role="listitem" title={technology.name} aria-label={technology.name}>
+          <img
+            src={technology.icon}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="technology-icon"
+          />
+        </div>
+      ))
+    }
+  </div>
+</div>

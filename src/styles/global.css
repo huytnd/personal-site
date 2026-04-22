@@ -153,11 +153,17 @@ body {
     transition: none;
   }
 
+  .technology-marquee-track {
+    animation: none;
+    transform: none;
+  }
+
   :where(.surface-card,
     .blog-post-card,
     .project-card,
     .about-contact-card,
     .case-study-related-card,
+    .technology-item,
     .action-button):hover {
     transform: none;
   }
@@ -181,6 +187,105 @@ body {
 /* Duplicate content for seamless infinite scroll */
 .animate-marquee:hover {
   animation-play-state: paused;
+}
+
+/* ====================== TECHNOLOGY STRIP ====================== */
+
+.technology-section {
+  border-top: 1px solid var(--color-border);
+  background: #FFFFFF;
+  padding: 4rem 0;
+}
+
+.dark .technology-section {
+  background: #0F172A;
+}
+
+.technology-section-inner {
+  max-width: 80rem;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.technology-section-copy {
+  margin: 0 auto 2.5rem;
+  text-align: center;
+}
+
+.technology-section-copy h2 {
+  margin-top: 0.75rem;
+  color: var(--color-text);
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.technology-strip {
+  overflow: hidden;
+  padding: 0.25rem 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.technology-marquee-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: clamp(4rem, 9vw, 8rem);
+  animation: technology-marquee 34s linear infinite;
+}
+
+.technology-strip:hover .technology-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes technology-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-50% - 0.5rem));
+  }
+}
+
+.technology-item {
+  display: inline-flex;
+  height: 5rem;
+  width: 5rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+
+.technology-item:hover {
+  transform: translateY(-3px);
+  opacity: 0.82;
+}
+
+.technology-icon {
+  max-height: 4rem;
+  max-width: 4rem;
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .technology-section {
+    padding: 4.75rem 0;
+  }
+
+  .technology-item {
+    height: 6rem;
+    width: 6rem;
+  }
+
+  .technology-icon {
+    max-height: 4.75rem;
+    max-width: 4.75rem;
+  }
 }
 
 /* ====================== CARDS & BUTTONS ====================== */
