@@ -16,7 +16,10 @@
   --color-surface-raised: #FFFFFF;
   --color-border: #E2E8F0;
   --color-outline: #CBD5E1;
+  --color-ring: rgb(96 165 250 / 0.42);
+  --shadow-card: 0 16px 34px -26px rgb(15 23 42 / 0.55);
   --shadow-raised: 0 20px 25px -5px rgb(15 23 42 / 0.08), 0 8px 10px -6px rgb(15 23 42 / 0.08);
+  --shadow-hover: 0 28px 55px -30px rgb(15 23 42 / 0.48), 0 12px 24px -18px rgb(15 23 42 / 0.28);
 }
 
 .dark {
@@ -29,7 +32,10 @@
   --color-surface-raised: #1E293B;
   --color-border: #334155;
   --color-outline: #475569;
+  --color-ring: rgb(96 165 250 / 0.5);
+  --shadow-card: 0 18px 40px -26px rgb(0 0 0 / 0.72);
   --shadow-raised: 0 20px 25px -5px rgb(0 0 0 / 0.28), 0 8px 10px -6px rgb(0 0 0 / 0.24);
+  --shadow-hover: 0 30px 60px -30px rgb(0 0 0 / 0.8), 0 12px 28px -22px rgb(96 165 250 / 0.3);
 }
 
 html {
@@ -39,6 +45,16 @@ html {
 body {
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+}
+
+:where(a, button):focus-visible {
+  outline: 3px solid var(--color-ring);
+  outline-offset: 4px;
+}
+
+::selection {
+  background: rgb(96 165 250 / 0.28);
+  color: var(--color-text);
 }
 
 .site-main {
@@ -108,10 +124,28 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.001ms !important;
+  }
+
   .scroll-fade {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  :where(.surface-card,
+    .blog-post-card,
+    .project-card,
+    .about-contact-card,
+    .case-study-related-card,
+    .action-button):hover {
+    transform: none;
   }
 }
 
@@ -142,17 +176,21 @@ body {
   border-radius: 1.5rem;
   background: var(--color-surface-raised);
   padding: 1.5rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: var(--shadow-card);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
 .surface-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 
-              0 8px 10px -6px rgb(0 0 0 / 0.1);
+  border-color: rgb(96 165 250 / 0.58);
+  box-shadow: var(--shadow-hover);
 }
 
 .dark .surface-card:hover {
-  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.3);
+  box-shadow: var(--shadow-hover);
 }
 
 .surface-card--interactive {
@@ -184,6 +222,11 @@ body {
   line-height: 1;
   padding: 0.5rem 0.75rem;
   white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.35);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .dark .chip {
@@ -211,18 +254,27 @@ body {
   padding: 14px 28px;
   border-radius: 9999px;
   font-weight: 600;
-  transition: all 0.2s ease;
+  min-height: 3rem;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    color 0.2s ease,
+    gap 0.2s ease,
+    transform 0.2s ease;
   text-decoration: none;
 }
 
 .action-button--filled {
   background-color: var(--accent);
   color: white;
+  box-shadow: 0 18px 35px -24px rgb(10 37 64 / 0.85);
 }
 
 .action-button--filled:hover {
   background-color: #1e40af;
   transform: translateY(-1px);
+  box-shadow: 0 24px 45px -24px rgb(30 64 175 / 0.7);
 }
 
 .action-button--tonal {
@@ -231,10 +283,21 @@ body {
   border: 1px solid #e2e8f0;
 }
 
+.action-button--tonal:hover {
+  border-color: rgb(96 165 250 / 0.72);
+  background-color: #eaf2ff;
+  transform: translateY(-1px);
+}
+
 .dark .action-button--tonal {
   background-color: #1e2937;
   color: white;
   border-color: #334155;
+}
+
+.dark .action-button--tonal:hover {
+  border-color: rgb(96 165 250 / 0.65);
+  background-color: #24344b;
 }
 
 .action-button--text {
@@ -245,10 +308,79 @@ body {
 
 .action-button--text:hover {
   color: #1e40af;
+  gap: 0.75rem;
 }
 
 .dark .action-button--text:hover {
   color: #93c5fd;
+}
+
+:where(.blog-summary-grid > div,
+  .projects-summary-grid > div,
+  .about-profile-card,
+  .featured-post-card,
+  .blog-post-card,
+  .project-feature-card,
+  .project-card,
+  .about-care-panel,
+  .about-contact-card,
+  .case-study-section-card,
+  .case-study-related-card) {
+  box-shadow: var(--shadow-card);
+}
+
+:where(.featured-post-card,
+  .blog-post-card,
+  .project-feature-card,
+  .project-card,
+  .about-contact-card,
+  .case-study-section-card,
+  .case-study-related-card) {
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+:where(.featured-post-card,
+  .blog-post-card,
+  .project-feature-card,
+  .project-card,
+  .about-contact-card,
+  .case-study-related-card):hover {
+  border-color: rgb(96 165 250 / 0.65);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-3px);
+}
+
+:where(.blog-text-link,
+  .blog-card-link,
+  .article-link,
+  .project-card h2 a,
+  .blog-post-card h3 a,
+  .featured-post-card h3 a,
+  .project-feature-card h3 a,
+  .article-prose a) {
+  transition:
+    color 0.2s ease,
+    gap 0.2s ease,
+    text-decoration-color 0.2s ease;
+}
+
+nav.fixed.bottom-0 > div {
+  box-shadow: 0 22px 60px -28px rgb(15 23 42 / 0.72);
+}
+
+nav.fixed.bottom-0 a {
+  isolation: isolate;
+}
+
+nav.fixed.bottom-0 a:hover {
+  background: rgb(96 165 250 / 0.08);
+}
+
+.dark nav.fixed.bottom-0 a:hover {
+  background: rgb(96 165 250 / 0.1);
 }
 
 /* ====================== BLOG INDEX ====================== */
@@ -256,7 +388,7 @@ body {
 .blog-hero {
   margin: 0 auto;
   max-width: 80rem;
-  padding: 3.5rem 1.5rem 0;
+  padding: clamp(2.75rem, 5vw, 3.75rem) 1.5rem 0;
 }
 
 .blog-section {
@@ -286,7 +418,7 @@ body {
   border: 1px solid var(--color-border);
   border-radius: 1.5rem;
   background: var(--color-surface-raised);
-  box-shadow: var(--shadow-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .featured-post-media {
@@ -322,7 +454,7 @@ body {
 
 .blog-post-card:hover {
   border-color: rgb(96 165 250 / 0.7);
-  box-shadow: var(--shadow-raised);
+  box-shadow: var(--shadow-hover);
   transform: translateY(-3px);
 }
 
@@ -358,7 +490,7 @@ body {
 .article-shell {
   margin: 0 auto;
   max-width: 80rem;
-  padding: 3.5rem 1.5rem 0;
+  padding: clamp(2.75rem, 5vw, 3.75rem) 1.5rem 0;
 }
 
 .article-link {
@@ -540,7 +672,7 @@ body {
 .about-hero {
   display: grid;
   gap: 2.5rem;
-  padding-top: 3.5rem;
+  padding-top: clamp(2.75rem, 5vw, 3.75rem);
 }
 
 .about-hero-copy {
@@ -548,7 +680,7 @@ body {
 }
 
 .about-section {
-  margin-top: 4rem;
+  margin-top: clamp(3.5rem, 7vw, 5rem);
 }
 
 .portrait-shell {
@@ -680,7 +812,7 @@ body {
 
 .about-contact-card:hover {
   border-color: rgb(96 165 250 / 0.7);
-  box-shadow: var(--shadow-raised);
+  box-shadow: var(--shadow-hover);
   transform: translateY(-3px);
 }
 
@@ -743,7 +875,7 @@ body {
 
 .projects-hero,
 .case-study-shell {
-  padding-top: 3.5rem;
+  padding-top: clamp(2.75rem, 5vw, 3.75rem);
 }
 
 .projects-summary-grid {
@@ -765,7 +897,7 @@ body {
   border: 1px solid var(--color-border);
   border-radius: 1.5rem;
   background: var(--color-surface-raised);
-  box-shadow: var(--shadow-raised);
+  box-shadow: var(--shadow-card);
 }
 
 .project-feature-card {
@@ -933,7 +1065,7 @@ body {
 
 .case-study-related-card:hover {
   border-color: rgb(96 165 250 / 0.7);
-  box-shadow: var(--shadow-raised);
+  box-shadow: var(--shadow-hover);
   transform: translateY(-3px);
 }
 
