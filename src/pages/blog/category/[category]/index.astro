@@ -1,0 +1,103 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import Pagination from "@/components/blog/Pagination.astro";
+import PostCard from "@/components/blog/PostCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import {
+  BLOG_PAGE_SIZE,
+  getAllCategories,
+  getPaginationLinks,
+  getPostsByCategory,
+  getCategoryPageUrl,
+} from "@/lib/blog";
+
+export const getStaticPaths = (async () => {
+  const categories = await getAllCategories();
+
+  return Promise.all(
+    categories.map(async (category) => {
+      const posts = await getPostsByCategory(category.slug);
+      const totalPages = Math.ceil(posts.length / BLOG_PAGE_SIZE);
+
+      return {
+        params: { category: category.slug },
+        props: {
+          category,
+          posts: posts.slice(0, BLOG_PAGE_SIZE),
+          totalPages,
+          totalPosts: posts.length,
+        },
+      };
+    }),
+  );
+}) satisfies GetStaticPaths;
+
+const {
+  category,
+  posts,
+  totalPages,
+  totalPosts,
+} = Astro.props as InferGetStaticPropsType<typeof getStaticPaths>;
+const pagination = getPaginationLinks(1, totalPages, (pageNumber) =>
+  getCategoryPageUrl(category.slug, pageNumber),
+);
+---
+
+<BaseLayout
+  title={`${category.label} Articles`}
+  description={`Posts filed under ${category.label}, including ${totalPosts} published article${totalPosts === 1 ? "" : "s"}.`}
+>
+  <section class="blog-hero">
+    <div class="max-w-4xl">
+      <a href="/blog" class="article-link">
+        <span aria-hidden="true">&lt;-</span>
+        Back to blog
+      </a>
+      <p class="section-kicker mt-8">Category</p>
+      <h1 class="page-title mt-3 text-5xl text-slate-950 dark:text-white md:text-6xl">
+        {category.label}
+      </h1>
+      <p class="page-copy max-w-3xl">
+        Browse every published post in this category. Category URLs are normalized, but the display label stays aligned with the content model.
+      </p>
+    </div>
+
+    <div class="blog-summary-grid">
+      <div>
+        <p class="eyebrow-label">Posts</p>
+        <p class="mt-2 text-4xl font-semibold tracking-tight text-[#0A2540] dark:text-[#60A5FA]">
+          {totalPosts}
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow-label">Pages</p>
+        <p class="mt-2 text-4xl font-semibold tracking-tight text-[#0A2540] dark:text-[#60A5FA]">
+          {Math.max(totalPages, 1)}
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow-label">Slug</p>
+        <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">
+          /blog/category/{category.slug}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blog-section mt-16">
+    <div class="blog-post-grid">
+      {posts.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+
+  <section class="blog-section mt-16">
+    <Pagination
+      currentPage={1}
+      lastPage={Math.max(totalPages, 1)}
+      firstUrl={pagination.first}
+      prevUrl={pagination.prev}
+      nextUrl={pagination.next}
+      lastUrl={pagination.last}
+    />
+  </section>
+</BaseLayout>

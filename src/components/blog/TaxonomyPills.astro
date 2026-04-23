@@ -1,0 +1,74 @@
+---
+import type { TaxonomySummary } from "@/lib/blog";
+import { getCategoryPageUrl, getTagPageUrl } from "@/lib/blog";
+import { getTagDisplayLabel, normalizeTag, slugify } from "@/lib/taxonomy";
+
+interface Props {
+  category?: string;
+  tags?: string[];
+  categories?: TaxonomySummary[];
+  tagItems?: TaxonomySummary[];
+  className?: string;
+  tagLimit?: number;
+}
+
+const {
+  category,
+  tags = [],
+  categories = [],
+  tagItems = [],
+  className = "",
+  tagLimit,
+} = Astro.props;
+
+const renderedTags = [...new Map(
+  tags.map((tag) => {
+    const slug = normalizeTag(tag);
+
+    return [
+      slug,
+      {
+        label: getTagDisplayLabel(tag),
+        slug,
+      },
+    ];
+  }),
+).values()];
+
+const limitedTags =
+  typeof tagLimit === "number" ? renderedTags.slice(0, tagLimit) : renderedTags;
+---
+
+<div class:list={["flex flex-wrap items-center gap-2", className]}>
+  {
+    category && (
+      <a href={getCategoryPageUrl(slugify(category))} class="chip">
+        {category}
+      </a>
+    )
+  }
+
+  {
+    categories.map((item) => (
+      <a href={getCategoryPageUrl(item.slug)} class="chip">
+        {item.label}
+      </a>
+    ))
+  }
+
+  {
+    limitedTags.map((item) => (
+      <a href={getTagPageUrl(item.slug)} class="chip chip--neutral">
+        #{item.label}
+      </a>
+    ))
+  }
+
+  {
+    tagItems.map((item) => (
+      <a href={getTagPageUrl(item.slug)} class="chip chip--neutral">
+        #{item.label}
+      </a>
+    ))
+  }
+</div>

@@ -1,0 +1,92 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import Pagination from "@/components/blog/Pagination.astro";
+import PostCard from "@/components/blog/PostCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import {
+  BLOG_PAGE_SIZE,
+  getAllPosts,
+  getBlogIndexPageUrl,
+  getPaginationLinks,
+} from "@/lib/blog";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = await getAllPosts();
+
+  return paginate(posts, { pageSize: BLOG_PAGE_SIZE })
+    .slice(1)
+    .map((entry) => ({
+      ...entry,
+      params: {
+        ...entry.params,
+        page: `page-${entry.props.page.currentPage}`,
+      },
+    }));
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props as InferGetStaticPropsType<typeof getStaticPaths>;
+const pagination = getPaginationLinks(
+  page.currentPage,
+  page.lastPage,
+  getBlogIndexPageUrl,
+);
+---
+
+<BaseLayout
+  title={`Blog - Page ${page.currentPage}`}
+  description={`Page ${page.currentPage} of the blog archive for engineering notes, deployment workflows, and backend architecture writing.`}
+>
+  <section class="blog-hero">
+    <div class="max-w-4xl">
+      <a href="/blog" class="article-link">
+        <span aria-hidden="true">&lt;-</span>
+        Back to blog home
+      </a>
+      <p class="section-kicker mt-8">Writing</p>
+      <h1 class="page-title mt-3 text-5xl text-slate-950 dark:text-white md:text-6xl">
+        Blog archive, page {page.currentPage}
+      </h1>
+      <p class="page-copy max-w-3xl">
+        Older entries from the blog, sorted by publish date and kept under the same blog namespace for predictable URLs.
+      </p>
+    </div>
+
+    <div class="blog-summary-grid">
+      <div>
+        <p class="eyebrow-label">Current page</p>
+        <p class="mt-2 text-4xl font-semibold tracking-tight text-[#0A2540] dark:text-[#60A5FA]">
+          {page.currentPage}
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow-label">Total pages</p>
+        <p class="mt-2 text-4xl font-semibold tracking-tight text-[#0A2540] dark:text-[#60A5FA]">
+          {page.lastPage}
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow-label">Articles</p>
+        <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">
+          Showing {page.start + 1}-{page.end + 1} of {page.total} posts.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blog-section mt-16">
+    <div class="blog-post-grid">
+      {page.data.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+
+  <section class="blog-section mt-16">
+    <Pagination
+      currentPage={page.currentPage}
+      lastPage={page.lastPage}
+      firstUrl={pagination.first}
+      prevUrl={pagination.prev}
+      nextUrl={pagination.next}
+      lastUrl={pagination.last}
+    />
+  </section>
+</BaseLayout>

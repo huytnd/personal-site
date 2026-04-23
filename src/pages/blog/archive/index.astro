@@ -1,0 +1,87 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { formatBlogDate, getAllPosts, getBlogPostUrl, groupPostsByYear } from "@/lib/blog";
+
+const posts = await getAllPosts();
+const postsByYear = groupPostsByYear(posts);
+---
+
+<BaseLayout
+  title="Blog Archive"
+  description="Chronological archive of published blog posts grouped by year."
+>
+  <section class="blog-hero">
+    <div class="max-w-4xl">
+      <a href="/blog" class="article-link">
+        <span aria-hidden="true">&lt;-</span>
+        Back to blog
+      </a>
+      <p class="section-kicker mt-8">Archive</p>
+      <h1 class="page-title mt-3 text-5xl text-slate-950 dark:text-white md:text-6xl">
+        Blog archive
+      </h1>
+      <p class="page-copy max-w-3xl">
+        A simple year-by-year view of everything published in the blog collection.
+      </p>
+    </div>
+
+    <div class="blog-summary-grid">
+      <div>
+        <p class="eyebrow-label">Articles</p>
+        <p class="mt-2 text-4xl font-semibold tracking-tight text-[#0A2540] dark:text-[#60A5FA]">
+          {posts.length}
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow-label">Years</p>
+        <p class="mt-2 text-4xl font-semibold tracking-tight text-[#0A2540] dark:text-[#60A5FA]">
+          {postsByYear.length}
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow-label">Sort order</p>
+        <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">
+          Newest year first, newest post first within each year.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blog-section mt-16">
+    <div class="blog-archive">
+      {postsByYear.map(([year, yearPosts]) => (
+        <section class="blog-archive__year">
+          <div class="blog-archive__heading">
+            <h2 class="text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">
+              {year}
+            </h2>
+            <p class="text-sm text-slate-500 dark:text-slate-400">
+              {yearPosts.length} post{yearPosts.length === 1 ? "" : "s"}
+            </p>
+          </div>
+
+          <ol class="blog-archive__list">
+            {yearPosts.map((post) => (
+              <li class="blog-archive__item">
+                <a href={getBlogPostUrl(post)} class="blog-archive__item-link">
+                  <div>
+                    <h3 class="text-xl font-semibold tracking-tight text-slate-950 dark:text-white">
+                      {post.data.title}
+                    </h3>
+                    <p class="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-400">
+                      {post.data.description}
+                    </p>
+                  </div>
+
+                  <span class="blog-archive__date">
+                    {formatBlogDate(post.data.publishedDate)}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))}
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,62 @@
+---
+import { Image } from "astro:assets";
+import type { BlogPost } from "@/lib/blog";
+import { formatBlogDate, getBlogPostUrl } from "@/lib/blog";
+import TaxonomyPills from "./TaxonomyPills.astro";
+
+interface Props {
+  post: BlogPost;
+  showCover?: boolean;
+  tagLimit?: number;
+}
+
+const { post, showCover = false, tagLimit = 4 } = Astro.props;
+const postUrl = getBlogPostUrl(post);
+const coverAlt = post.data.coverAlt ?? post.data.title;
+---
+
+<article class:list={["blog-post-card", showCover && post.data.coverImage && "blog-post-card--with-cover"]}>
+  {
+    showCover && post.data.coverImage && (
+      <a href={postUrl} class="blog-post-card__media group" aria-label={`Read ${post.data.title}`}>
+        <Image
+          src={post.data.coverImage}
+          alt={coverAlt}
+          widths={[640, 960, 1280]}
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+        />
+      </a>
+    )
+  }
+
+  <div class="flex min-w-0 flex-1 flex-col">
+    <div class="flex flex-wrap items-center gap-2">
+      <TaxonomyPills category={post.data.category} />
+      <span class="text-sm text-slate-500 dark:text-slate-400">
+        {formatBlogDate(post.data.publishedDate)}
+      </span>
+    </div>
+
+    <h3 class="mt-5 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">
+      <a href={postUrl} class="hover:text-[#0A2540] dark:hover:text-[#60A5FA]">
+        {post.data.title}
+      </a>
+    </h3>
+
+    <p class="mt-4 line-clamp-3 leading-7 text-slate-600 dark:text-slate-400">
+      {post.data.description}
+    </p>
+
+    {
+      post.data.tags.length > 0 && (
+        <TaxonomyPills className="mt-6" tags={post.data.tags} tagLimit={tagLimit} />
+      )
+    }
+
+    <a href={postUrl} class="blog-card-link">
+      Read article
+      <span aria-hidden="true">-></span>
+    </a>
+  </div>
+</article>

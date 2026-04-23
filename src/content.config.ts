@@ -1,10 +1,11 @@
 import { defineCollection } from "astro:content";
 import { glob } from "astro/loaders";
 import { z } from "astro/zod";
+import { BLOG_CATEGORIES } from "./lib/taxonomy";
 
 const blog = defineCollection({
   loader: glob({
-    pattern: "*.{md,mdx}",
+    pattern: "**/*.{md,mdx}",
     base: "src/content/blog",
   }),
   schema: ({ image }) =>
@@ -14,11 +15,13 @@ const blog = defineCollection({
       publishedDate: z.coerce.date(),
       updatedDate: z.coerce.date().optional(),
       draft: z.boolean().default(false),
-      coverImage: image().optional(),
-      coverAlt: z.string().default(""),
-      category: z.string().optional(),
-      tags: z.array(z.string()).default([]),
+      category: z.enum(BLOG_CATEGORIES),
+      tags: z.array(z.string().trim().min(1)).default([]),
       featured: z.boolean().default(false),
+      series: z.string().trim().min(1).optional(),
+      coverImage: image().optional(),
+      coverAlt: z.string().optional(),
+      canonicalUrl: z.string().url().optional(),
     }),
 });
 

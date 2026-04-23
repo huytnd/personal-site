@@ -1,0 +1,107 @@
+---
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import Pagination from "@/components/blog/Pagination.astro";
+import PostCard from "@/components/blog/PostCard.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import {
+  BLOG_PAGE_SIZE,
+  getAllCategories,
+  getCategoryPageUrl,
+  getPaginationLinks,
+  getPostsByCategory,
+} from "@/lib/blog";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const categories = await getAllCategories();
+  const entries = await Promise.all(
+    categories.map(async (category) => {
+      const posts = await getPostsByCategory(category.slug);
+
+      return paginate(posts, {
+        pageSize: BLOG_PAGE_SIZE,
+        params: { category: category.slug },
+        props: { category },
+      })
+        .slice(1)
+        .map((entry) => ({
+          ...entry,
+          params: {
+            ...entry.params,
+            page: `page-${entry.props.page.currentPage}`,
+          },
+        }));
+    }),
+  );
+
+  return entries.flat();
+}) satisfies GetStaticPaths;
+
+const {
+  page,
+  category,
+} = Astro.props as InferGetStaticPropsType<typeof getStaticPaths>;
+const pagination = getPaginationLinks(
+  page.currentPage,
+  page.lastPage,
+  (pageNumber) => getCategoryPageUrl(category.slug, pageNumber),
+);
+---
+
+<BaseLayout
+  title={`${category.label} Articles - Page ${page.currentPage}`}
+  description={`Page ${page.currentPage} of the ${category.label} category archive.`}
+>
+  <section class="blog-hero">
+    <div class="max-w-4xl">
+      <a href={getCategoryPageUrl(category.slug)} class="article-link">
+        <span aria-hidden="true">&lt;-</span>
+        Back to {category.label}
+      </a>
+      <p class="section-kicker mt-8">Category</p>
+      <h1 class="page-title mt-3 text-5xl text-slate-950 dark:text-white md:text-6xl">
+        {category.label}, page {page.currentPage}
+      </h1>
+      <p class="page-copy max-w-3xl">
+        Paginated category results under the blog namespace with the same post cards and metadata treatment as the main index.
+      </p>
+    </div>
+
+    <div class="blog-summary-grid">
+      <div>
+        <p class="eyebrow-label">Current page</p>
+        <p class="mt-2 text-4xl font-semibold tracking-tight text-[#0A2540] dark:text-[#60A5FA]">
+          {page.currentPage}
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow-label">Total pages</p>
+        <p class="mt-2 text-4xl font-semibold tracking-tight text-[#0A2540] dark:text-[#60A5FA]">
+          {page.lastPage}
+        </p>
+      </div>
+      <div>
+        <p class="eyebrow-label">Posts</p>
+        <p class="mt-3 text-sm leading-6 text-slate-600 dark:text-slate-400">
+          Showing {page.start + 1}-{page.end + 1} of {page.total} posts.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="blog-section mt-16">
+    <div class="blog-post-grid">
+      {page.data.map((post) => <PostCard post={post} />)}
+    </div>
+  </section>
+
+  <section class="blog-section mt-16">
+    <Pagination
+      currentPage={page.currentPage}
+      lastPage={page.lastPage}
+      firstUrl={pagination.first}
+      prevUrl={pagination.prev}
+      nextUrl={pagination.next}
+      lastUrl={pagination.last}
+    />
+  </section>
+</BaseLayout>

@@ -1,14 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import TechnologyStrip from "../components/TechnologyStrip.astro";
-import { getCollection } from "astro:content";
 import { projects } from "@/data/projects";
+import { getAllPosts, getBlogPostUrl } from "@/lib/blog";
 
 const featuredProjects = projects;
 
-const latestPosts = (await getCollection("blog", ({ data }) => !data.draft))
-  .sort((a, b) => b.data.publishedDate.getTime() - a.data.publishedDate.getTime())
-  .slice(0, 3);
+const latestPosts = (await getAllPosts()).slice(0, 3);
 
 const pageDescription =
   "Huy Tran is a software engineer focused on scalable .NET backend systems, cloud architecture, observability, and production-minded delivery.";
@@ -158,7 +156,7 @@ const pageDescription =
             </div>
             
             <h3 class="font-semibold text-xl leading-tight group-hover:text-accent dark:group-hover:text-accent-light transition-colors">
-              <a href={`/blog/${post.id}`}>{post.data.title}</a>
+              <a href={getBlogPostUrl(post)}>{post.data.title}</a>
             </h3>
 
             <p class="mt-4 text-slate-600 dark:text-slate-400 line-clamp-3 flex-1">
@@ -166,7 +164,7 @@ const pageDescription =
             </p>
 
             <div class="mt-8 pt-6 border-t border-slate-100 dark:border-slate-700">
-              <a href={`/blog/${post.id}`} 
+              <a href={getBlogPostUrl(post)} 
                  class="text-sm font-medium text-accent dark:text-accent-light inline-flex items-center gap-2">
                 Read article →
               </a>

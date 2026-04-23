@@ -1,12 +1,8 @@
 import rss from '@astrojs/rss';
-import { getCollection } from 'astro:content';
+import { getAllPosts, getBlogPostUrl } from '@/lib/blog';
 
 export async function GET(context) {
-  const posts = await getCollection('blog');
-
-  const publishedPosts = posts
-    .filter((post) => !post.data.draft)
-    .sort((a, b) => b.data.publishedDate.valueOf() - a.data.publishedDate.valueOf());
+  const publishedPosts = await getAllPosts();
 
   return rss({
     title: 'Huy Tran Blog',
@@ -16,7 +12,7 @@ export async function GET(context) {
       title: post.data.title,
       pubDate: post.data.publishedDate,
       description: post.data.description,
-      link: `/blog/${post.slug ?? post.id}/`,
+      link: getBlogPostUrl(post),
     })),
     customData: `<language>vi-vn</language>`,
   });

@@ -1,9 +1,9 @@
-import { getCollection } from 'astro:content';
 import { OGImageRoute } from 'astro-og-canvas';
+import { getAllPosts } from '@/lib/blog';
 
 const localOgFont = '/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf';
 
-const posts = await getCollection('blog', ({ data }) => !data.draft);
+const posts = await getAllPosts();
 
 const pages = Object.fromEntries(
   posts.map((post) => [

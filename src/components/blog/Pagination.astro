@@ -1,0 +1,65 @@
+---
+interface Props {
+  currentPage: number;
+  lastPage: number;
+  firstUrl?: string;
+  prevUrl?: string;
+  nextUrl?: string;
+  lastUrl?: string;
+  className?: string;
+}
+
+const {
+  currentPage,
+  lastPage,
+  firstUrl,
+  prevUrl,
+  nextUrl,
+  lastUrl,
+  className = "",
+} = Astro.props;
+---
+
+{
+  lastPage > 1 && (
+    <nav
+      class:list={["blog-pagination", className]}
+      aria-label="Pagination"
+    >
+      <p class="blog-pagination__status">
+        Page {currentPage} of {lastPage}
+      </p>
+
+      <div class="blog-pagination__links">
+        {
+          firstUrl && (
+            <a href={firstUrl} class="action-button action-button--tonal">
+              First
+            </a>
+          )
+        }
+        {
+          prevUrl && (
+            <a href={prevUrl} class="action-button action-button--tonal" rel="prev">
+              Previous
+            </a>
+          )
+        }
+        {
+          nextUrl && (
+            <a href={nextUrl} class="action-button action-button--tonal" rel="next">
+              Next
+            </a>
+          )
+        }
+        {
+          lastUrl && (
+            <a href={lastUrl} class="action-button action-button--tonal">
+              Last
+            </a>
+          )
+        }
+      </div>
+    </nav>
+  )
+}

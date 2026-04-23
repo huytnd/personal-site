@@ -1,31 +1,37 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import BlogCover from "../components/BlogCover.astro";
+import PostCard from "@/components/blog/PostCard.astro";
+import TaxonomyPills from "@/components/blog/TaxonomyPills.astro";
+import { formatBlogDate, getArchiveUrl, type BlogPost } from "@/lib/blog";
 
-const { frontmatter, category } = Astro.props;
+interface Props {
+  frontmatter: BlogPost["data"];
+  postUrl: string;
+  relatedPosts?: BlogPost[];
+}
 
-const formatDate = (value: string | Date | undefined) => {
-  if (!value) return undefined;
+const {
+  frontmatter,
+  postUrl,
+  relatedPosts = [],
+} = Astro.props as Props;
 
-  const date = value instanceof Date ? value : new Date(value);
-  return Number.isNaN(date.getTime()) ? undefined : date.toDateString();
-};
-
-const formatCategory = (value: string) =>
-  value
-    .split(/[-_]/)
-    .map((part: string) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-
-const publishedDate = formatDate(frontmatter.publishedDate);
-const updatedDate = formatDate(frontmatter.updatedDate);
+const publishedDate = formatBlogDate(frontmatter.publishedDate);
+const updatedDate = frontmatter.updatedDate
+  ? formatBlogDate(frontmatter.updatedDate)
+  : undefined;
 ---
 
-<BaseLayout title={frontmatter.title} 
-    description={frontmatter.description} 
-    publishedDate={frontmatter.publishedDate}
-    updatedDate={frontmatter.updatedDate}
-    type="article">
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  image={frontmatter.coverImage?.src}
+  publishedDate={frontmatter.publishedDate.toISOString()}
+  updatedDate={frontmatter.updatedDate?.toISOString()}
+  canonicalURL={frontmatter.canonicalUrl ?? postUrl}
+  type="article"
+>
   <article class="article-shell">
     <a href="/blog" class="article-link">
       <span aria-hidden="true">&lt;-</span>
@@ -33,18 +39,7 @@ const updatedDate = formatDate(frontmatter.updatedDate);
     </a>
 
     <header class="article-header">
-      <div class="flex flex-wrap items-center gap-2">
-        {
-          category && (
-            <span class="chip">{formatCategory(category)}</span>
-          )
-        }
-        {
-          frontmatter.tags?.map((tag: string) => (
-            <span class="chip chip--neutral">#{tag}</span>
-          ))
-        }
-      </div>
+      <TaxonomyPills category={frontmatter.category} tags={frontmatter.tags} />
 
       <h1 class="page-title mt-6 max-w-4xl text-5xl text-slate-950 dark:text-white md:text-6xl">
         {frontmatter.title}
@@ -56,9 +51,14 @@ const updatedDate = formatDate(frontmatter.updatedDate);
 
       <div class="mt-6 flex flex-wrap items-center gap-4 text-sm text-[var(--color-text-muted)]">
         {publishedDate && <span>{publishedDate}</span>}
+      {
+        updatedDate && (
+          <span>Updated: {updatedDate}</span>
+        )
+      }
         {
-          updatedDate && (
-            <span>Updated: {updatedDate}</span>
+          frontmatter.series && (
+            <span>Series: {frontmatter.series}</span>
           )
         }
       </div>
@@ -80,13 +80,30 @@ const updatedDate = formatDate(frontmatter.updatedDate);
       <slot />
     </div>
 
+    {
+      relatedPosts.length > 0 && (
+        <section class="article-related">
+          <div class="mb-8">
+            <p class="section-kicker">Related</p>
+            <h2 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950 dark:text-white">
+              Continue reading
+            </h2>
+          </div>
+
+          <div class="blog-post-grid">
+            {relatedPosts.map((post) => <PostCard post={post} />)}
+          </div>
+        </section>
+      )
+    }
+
     <footer class="article-footer-nav">
       <a href="/blog" class="action-button action-button--tonal">
         <span aria-hidden="true">&lt;-</span>
         Back to blog
       </a>
-      <a href="/rss.xml" class="blog-text-link">
-        More writing via RSS
+      <a href={getArchiveUrl()} class="blog-text-link">
+        Browse the archive
         <span aria-hidden="true">-></span>
       </a>
     </footer>

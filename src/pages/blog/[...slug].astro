@@ -1,9 +1,10 @@
 ---
-import BlogPostLayout from '../../layouts/BlogPostLayout.astro';
-import { getCollection, getEntry, render } from 'astro:content';
+import { getEntry, render } from "astro:content";
+import BlogPostLayout from "@/layouts/BlogPostLayout.astro";
+import { getAllPosts, getBlogPostUrl, getRelatedPosts } from "@/lib/blog";
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog', ({ data }) => !data.draft);
+  const posts = await getAllPosts();
 
   return posts.map((post) => ({
     params: { slug: post.id },
@@ -11,18 +12,21 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const post = await getEntry('blog', slug!);
+const post = await getEntry("blog", slug!);
 
 if (!post || post.data.draft) {
-  return Astro.redirect('/404');
+  return Astro.redirect("/404");
 }
 
+const allPosts = await getAllPosts();
+const relatedPosts = getRelatedPosts(post, allPosts);
 const { Content } = await render(post);
 ---
 
-<BlogPostLayout 
+<BlogPostLayout
   frontmatter={post.data}
-  category={post.data.category}
+  postUrl={getBlogPostUrl(post)}
+  relatedPosts={relatedPosts}
 >
   <Content />
 </BlogPostLayout>
